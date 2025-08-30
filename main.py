@@ -154,7 +154,7 @@ tags:
         txt.writelines(out)
 
 
-def make_event(event_date, posts):
+def make_event(event_date, posts: list[Post]):
     out = f"""---
 slug: \"{event_date}\"
 date: {datetime.strptime(event_date, "%y%m%d")}
@@ -166,6 +166,9 @@ date: {datetime.strptime(event_date, "%y%m%d")}
 
     by_author = dict()
     for p in posts:
+        if "open.kakao.com" in p.full_text:
+            continue
+
         by_author.setdefault(p.author, [])
         by_author[p.author].append(p)
 
@@ -185,7 +188,7 @@ date: {datetime.strptime(event_date, "%y%m%d")}
                 out += post_md
                 out += '\n'
 
-    dir = f'docs/twitter/posts'
+    dir = f'docs/events'
     os.makedirs(dir, exist_ok=True)
     out_path = f'{dir}/{event_date}.md'
 
@@ -199,7 +202,7 @@ def make_index(events):
 
     for e in sorted_events:
         out += f"""
-* [{e}](./twitter/posts/{e})
+* [{e}](./events/{e})
 """
 
     with open('docs/index.md', 'w', encoding='utf-8') as txt:
@@ -210,9 +213,9 @@ def make_index(events):
 
 
 def main():
-    if os.path.exists('docs/twitter/posts'):
-        shutil.rmtree('docs/twitter/posts')
-    os.makedirs('docs/twitter/posts')
+    if os.path.exists('docs/events'):
+        shutil.rmtree('docs/events')
+    os.makedirs('docs/events')
 
     # json_data, all_posts = gather_json_data(root_dir)
 
