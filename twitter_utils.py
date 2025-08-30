@@ -176,6 +176,9 @@ class Post:
             return [m for m in self.media if m['type'] == 'video']  # return [result for m in self.media if (result := get_video_url(m)) is not None]
         return []
 
+    def has_media(self):
+        return len(self.get_images()) > 0 or len(self.get_videos()) > 0
+
 
 def download_file(url, file_path, date, timeout=10, skip_exists=True):
     if skip_exists and os.path.exists(file_path):
@@ -308,6 +311,35 @@ def download_all_media(posts: list[Post]):
         # if ext != 'mp4':  #     breakpoint()
     print(len(videos))
 
+def gather_events(root_dir):
+    files = os.scandir(root_dir)
+    out = []
+    for file in files:
+        if file.is_file():
+            event_date = file.name.split('.')[0]
+            out.append(event_date)
+    return out
+
+def gather_posts_by_event(root_dir):
+    out_dict = dict()
+    files = os.scandir(root_dir)
+    for file in files:
+        if file.is_file():
+            event_date = file.name.split('.')[0]
+            with open(file.path, 'r', encoding='utf-8') as f:
+                json_data = json.load(f)
+
+            out_dict[event_date] = []
+
+            for d in json_data:
+                if not is_tweet(d):
+                    continue
+
+                post = Post(d)
+                out_dict[event_date].append(post)
+
+    return out_dict
+
 
 def gather_json_data(root_dir):
     files = os.listdir(root_dir)
@@ -335,7 +367,8 @@ def gather_json_data(root_dir):
 
                 all_posts = filter_posts(all_posts)
 
-                return json_data, all_posts
+            # return json_data, all_posts
+
 
                 # for data in json_data:  #     if data['content']['entryType'] != 'TimelineTimelineItem':  #         weird_types.add(data['content']['entryType'])  #         continue  #  #     print(data)  #  #     # break  #  # print(list(weird_types))  # return
 

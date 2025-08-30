@@ -15,15 +15,22 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
     if caption:
         caption = f'<figcaption>{caption}</figcaption>'
 
-    zoom_md = 'onclick="openFullscreen(this)' if zoom_click else ''
+    zoom_md = f'onclick="openFullscreen(this, \'{url}\')"' if zoom_click else ''
+
+    base_url = url.rsplit('.', maxsplit=1)[0]
+
+    if 'png' in url.rsplit('.', maxsplit=1)[1]:
+        print('FOUND PNG', url)
+
+    low_res_url = base_url + '?format=jpg&name=medium'
 
     if figure:
         return f"""\
 <figure markdown="1">
-![]({url}){{ loading=lazy {zoom_md}"}}{caption}
+![]({low_res_url}){{ loading=lazy {zoom_md}"}}{caption}
 </figure>"""
     else:
-        return f'![]({url + '?type=e1920'}){{ loading=lazy {zoom_md}"}}{caption}'
+        return f'![]({low_res_url}){{ loading=lazy {zoom_md}"}}{caption}'
 
 
 def make_iframe_md(embed_url, display_url=None):
@@ -55,8 +62,6 @@ Your browser does not support the video tag.
 
 def make_media_md(post):
     elems = []
-    post.get_images()
-    post.get_videos()
 
     for img in post.get_images():
         image_url = img['media_url_https']
@@ -91,7 +96,27 @@ def make_media_md(post):
     return '\n'.join(elems)
 
 
-def make_post(post: Post):
+def make_post_md(post: Post):
+    # tags = get_tags(post.data)
+    # tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
+
+    out = f"""
+<div class="post-container" markdown="1">
+<div class="content-container md-sidebar__scrollwrap" markdown="1">
+{post.full_text}
+
+{make_media_md(post)}
+</div>
+</div>
+
+<div style="text-align: right;" markdown="1">
+<a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
+</div>
+"""
+    
+    return out
+
+def make_post(event_date, post: Post):
     tags = get_tags(post.data)
     tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
 
@@ -121,24 +146,88 @@ tags:
     # if media := get_media(data):
     #     for m in media:
 
-    dir = 'docs/twitter/posts'
+    dir = f'docs/twitter/events/{event_date}/posts'
+    os.makedirs(dir, exist_ok=True)
     out_path = f'{dir}/{post.post_id}.md'
 
     with open(out_path, 'w', encoding='utf-8') as txt:
         txt.writelines(out)
 
 
+def make_event(event_date, posts):
+    out = f"""---
+slug: \"{event_date}\"
+date: {datetime.strptime(event_date, "%y%m%d")}
+---
+
+# {event_date}
+
+"""
+
+    by_author = dict()
+    for p in posts:
+        by_author.setdefault(p.author, [])
+        by_author[p.author].append(p)
+
+    by_author = dict(sorted(by_author.items(), key=lambda item: len(item[1]), reverse=True))
+
+    for auth, ps in by_author.items():
+        ps = [p for p in ps if p.has_media()]
+
+        if len(ps):
+            out += f'## {auth}\n'
+
+            for p in ps:
+                if len(p.get_images()) == 0 and len(p.get_videos()) == 0:
+                    continue
+
+                post_md = make_post_md(p)
+                out += post_md
+                out += '\n'
+
+    dir = f'docs/twitter/posts'
+    os.makedirs(dir, exist_ok=True)
+    out_path = f'{dir}/{event_date}.md'
+
+    with open(out_path, 'w', encoding='utf-8') as txt:
+        txt.writelines(out)
+
+def make_index(events):
+    sorted_events = sorted(events)
+
+    out = ""
+
+    for e in sorted_events:
+        out += f"""
+* [{e}](./twitter/posts/{e})
+"""
+
+    with open('docs/index.md', 'w', encoding='utf-8') as txt:
+        txt.writelines(out)
+
+    # posts_by_event = gather_events(root_dir)
+    # for event, posts in posts_by_event.items():
+
+
 def main():
-    shutil.rmtree('docs/twitter/posts')
+    if os.path.exists('docs/twitter/posts'):
+        shutil.rmtree('docs/twitter/posts')
     os.makedirs('docs/twitter/posts')
 
-    json_data, all_posts = gather_json_data(root_dir)
+    # json_data, all_posts = gather_json_data(root_dir)
 
-    print(f'Generating {len(all_posts)} posts')
+
+    posts_by_event = gather_posts_by_event(root_dir)
+
+    print(f'Generating {len(posts_by_event)} events')
+
+    make_index(posts_by_event.keys())
 
     i = 0
-    for p in all_posts:
-        make_post(p)
+    for event, posts in posts_by_event.items():
+        make_event(event, posts)
+        # for p in posts:
+        #     make_post(event, p)
 
         # i += 1
         # if i > 20:
