@@ -12,6 +12,9 @@ from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from webdriver_manager.firefox import GeckoDriverManager
 
 # --- Configuration ---
 SEARCH_QUERY = "\"171129\" fromis_9"  # The text you want to search for
@@ -33,11 +36,19 @@ def setup_driver():
     # options.add_argument("--disable-dev-shm-usage")
     # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
+    profile_path = r"C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\3uj5owbw.default-release"
+    options.add_argument("-profile")
+    options.add_argument(profile_path)
+    service = FirefoxService(GeckoDriverManager().install())
+
     # firefox_profile = FirefoxProfile(r'C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\i5077kqf.test')
-    firefox_profile = FirefoxProfile(r'C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\3uj5owbw.default-release')
-    options.profile = firefox_profile
+    # firefox_profile = FirefoxProfile(r'C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\3uj5owbw.default-release')
+    # options.profile = firefox_profile
+
     options.set_capability('pageLoadStrategy', 'eager')
-    driver = webdriver.Firefox(options=options)
+    # driver = webdriver.Firefox(options=options)
+    driver = webdriver.Firefox(service=service, options=options)
+
 
     return driver
 
@@ -101,7 +112,7 @@ def parse_search(driver, out_name, search):
     # print(json.dumps(data))
 
 def get_tsv():
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1446227550&single=true&output=tsv'
+    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1556948653&single=true&output=tsv'
     response = requests.get(url)
     response.encoding = 'utf-8'
     tsv_data = response.text
@@ -121,10 +132,13 @@ def get_tsv():
 
 
 def generate_json():
-    driver = setup_driver()
-
+    print('Get rows')
     rows = get_tsv()
     count = 0
+
+    print('Setup Driver')
+    driver = setup_driver()
+
     for r in rows:
         date = r['Date']
 
@@ -134,11 +148,19 @@ def generate_json():
         if len(date) == 0:
             continue
 
-        link = f'https://x.com/search?q=%22{date}%22%20%23fromis_9'
-        parse_search(driver, date, f'{link}&f=live')
+        if int(date) > 250500:
+            continue
+
+        # continue
+
+        # link = f'https://x.com/search?q=%22{date}%22%20%23fromis_9'
+        link = r['Twitter']
+        print('Parsing', date, link)
+        # parse_search(driver, date, f'{link}&f=live')
+        parse_search(driver, date, link)
         count += 1
 
-        time.sleep(300)
+        time.sleep(60)
 
         # if count >= 100:
         #     break
@@ -155,5 +177,6 @@ def search_account(acc):
 
 # --- Main Script ---
 if __name__ == "__main__":
+    print('Starting')
     generate_json()
     # search_account('suhyun2141')

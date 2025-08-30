@@ -27,18 +27,20 @@ def get_video_id(url: str):
     return clean_url.split('/')[0]
 
 
-def get_tags(data):
+def get_tags(p):
     pattern = r'(#[\w\uAC00-\uD7A3]+)'
-    full_text = get_legacy(data)['full_text']
+    full_text = p.full_text # get_legacy(data)['full_text']
     matches = re.findall(pattern, full_text)
     return [m for m in matches if not m.removeprefix('#').isdigit()]
 
 
-def write_all_tags(data_list, path):
+def write_all_tags(posts_by_event, path):
+    print('write all tags?')
     out = set()
-    for d in data_list:
-        for t in get_tags(d):
-            out.add(t.removeprefix('#'))
+    for e, ps in posts_by_event.items():
+        for p in ps:
+            for t in get_tags(p):
+                out.add(t.removeprefix('#'))
 
     with open(path, 'w', encoding='utf-8') as tag_file:
         tag_file.write('''# Tags
@@ -60,8 +62,10 @@ def get_full_text(data):
         for url in urls:
             full_text = full_text.replace(url['url'], f'[{url['expanded_url']}]({url['expanded_url']})')
 
-    pattern = r'(#[\w\uAC00-\uD7A3]+)'
-    full_text = re.sub(pattern, r'[\1](tags/\1)', full_text)
+    # pattern = r'(#[\w\uAC00-\uD7A3]+)'
+    pattern = r'#([\w\uAC00-\uD7A3]+)'
+    # full_text = re.sub(pattern, r'[\1](tags/\1)', full_text)
+    full_text = re.sub(pattern, r'[\1](https://x.com/hashtag/\1)', full_text)
 
     # .replace('#', '\\#')
     return full_text.replace('\n', '<br>\n').strip()
@@ -320,22 +324,43 @@ def gather_events(root_dir):
             out.append(event_date)
     return out
 
-def gather_posts_by_event(root_dir):
+def gather_posts_by_event(dirs):
     out_dict = dict()
-    files = os.scandir(root_dir)
+    files = []
+
+    for d in dirs:
+        files += os.scandir(d)
+
+    # for f in files:
+    #     print(f.name)
+    # return out_dict
+
+    with open('invalid.txt', 'r') as file:
+        ignored_auth = set(file.read().split())
+
+    seen = set()
     for file in files:
         if file.is_file():
             event_date = file.name.split('.')[0]
             with open(file.path, 'r', encoding='utf-8') as f:
                 json_data = json.load(f)
 
-            out_dict[event_date] = []
+            out_dict.setdefault(event_date, [])
 
             for d in json_data:
                 if not is_tweet(d):
                     continue
 
                 post = Post(d)
+                if post.author in ignored_auth:
+                    # print('Ignored', post.author)
+                    continue
+
+                if post.post_id in seen:
+                    # print('FOUND DUPE', post.post_id)
+                    continue
+
+                seen.add(post.post_id)
                 out_dict[event_date].append(post)
 
     return out_dict

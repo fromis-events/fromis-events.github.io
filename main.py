@@ -5,8 +5,11 @@ import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from twitter_utils import *
+import pandas as pd
 
-root_dir = 'json-test'
+# root_dir = 'json-test'
+
+events_sheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1556948653&single=true&output=tsv'
 
 weird_types = set()
 
@@ -19,8 +22,8 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
 
     base_url = url.rsplit('.', maxsplit=1)[0]
 
-    if 'png' in url.rsplit('.', maxsplit=1)[1]:
-        print('FOUND PNG', url)
+    # if 'png' in url.rsplit('.', maxsplit=1)[1]:
+    #     print('FOUND PNG', url)
 
     low_res_url = base_url + '?format=jpg&name=medium'
 
@@ -153,16 +156,49 @@ tags:
     with open(out_path, 'w', encoding='utf-8') as txt:
         txt.writelines(out)
 
+def make_youtube_md(url):
+    embed_url = url.replace('watch?v=', 'embed/')
+    return f"""
+<figure class="snippet" markdown="1">
+<iframe 
+    src="{embed_url}"
+    title="What is this"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+    allowfullscreen>
+</iframe>
+<a href="{url}">{url}</a>
+</figure>
+"""
 
-def make_event(event_date, posts: list[Post]):
+
+def make_event(event_date, posts: list[Post], events_dict):
+    if len(posts) == 0:
+        print('ERROR', event_date, 'has no posts')
+    #     return
+
+    events = events_dict[event_date]
     out = f"""---
 slug: \"{event_date}\"
 date: {datetime.strptime(event_date, "%y%m%d")}
 ---
 
-# {event_date}
+# {event_date} {get_event_name(event_date, events_dict)}
 
 """
+
+    for e in events:
+        out += f'**{e['Eng Name']}**\n\n'
+        out += f'* [Twitter Search]({e['Twitter']}) | [Youtube Search]({e['YouTube']})\n'
+
+        if cam_1 := e.get('Cam 1'):
+            out += make_youtube_md(cam_1) + '\n'
+
+        if cam_2 := e.get('Cam 2'):
+            out += make_youtube_md(cam_2) + '\n'
+
+        # out += f'# {e['Eng Name']}'
+        # print(e)
 
     by_author = dict()
     for p in posts:
@@ -195,14 +231,14 @@ date: {datetime.strptime(event_date, "%y%m%d")}
     with open(out_path, 'w', encoding='utf-8') as txt:
         txt.writelines(out)
 
-def make_index(events):
+def make_index(events, events_dict):
     sorted_events = sorted(events)
 
-    out = ""
+    out = "# Events\n"
 
     for e in sorted_events:
         out += f"""
-* [{e}](./events/{e})
+* [**{e}** {get_event_name(e, events_dict)}](./events/{e})
 """
 
     with open('docs/index.md', 'w', encoding='utf-8') as txt:
@@ -211,24 +247,59 @@ def make_index(events):
     # posts_by_event = gather_events(root_dir)
     # for event, posts in posts_by_event.items():
 
+def get_events_dict():
+    df = pd.read_csv(events_sheet, sep='\t', header=0)
+    df = df.where(pd.notnull(df), None)
+
+    # as_dict =
+    # print(as_dict)
+    event_dict = dict()
+
+    for r in df.to_dict(orient="records"):
+        event_dict.setdefault(str(r['Date']), [])
+        event_dict[str(r['Date'])].append(r)
+
+    # current_dates = dict()
+    # for row in df.values:
+    #     if not pd.isna(row[0]):
+    #         event_date = str(row[0])
+    #         event_name = row[1].replace('>', '').replace('<', '')
+    #
+    #         current_dates.setdefault(event_date, [])
+    #         current_dates[event_date].append(event_name)
+    #         # print(row[0], row[1])
+
+    return event_dict
+
+def get_event_name(event, events_dict):
+    if events := events_dict.get(event):
+        names = [e['Eng Name'] for e in events]
+        return ' & '.join(names)
+    else:
+        print('ERROR failed to find event name for', event)
+        return 'Unknown Event'
 
 def main():
+    events_dict = get_events_dict()
+
     if os.path.exists('docs/events'):
         shutil.rmtree('docs/events')
     os.makedirs('docs/events')
 
     # json_data, all_posts = gather_json_data(root_dir)
 
+    posts_by_event = gather_posts_by_event(['json-test'])
 
-    posts_by_event = gather_posts_by_event(root_dir)
+    # these are folders!
+    # posts_by_event = gather_posts_by_event(['json2', 'json'])
 
     print(f'Generating {len(posts_by_event)} events')
 
-    make_index(posts_by_event.keys())
+    make_index(posts_by_event.keys(), events_dict)
 
     i = 0
     for event, posts in posts_by_event.items():
-        make_event(event, posts)
+        make_event(event, posts, events_dict)
         # for p in posts:
         #     make_post(event, p)
 
@@ -236,7 +307,7 @@ def main():
         # if i > 20:
         #     break
 
-    # write_all_tags(json_data, 'docs/twitter/tags.md')
+    # write_all_tags(posts_by_event, 'docs/events/tags.md')
 
     # files = os.listdir(root_dir)  #  # shutil.rmtree('docs/twitter/posts')  # os.makedirs('docs/twitter/posts')  #  # for f in files:  #     if f.endswith('.json') and f.startswith('final'):  #         path = f'{root_dir}/{f}'  #         with open(path, 'r', encoding='utf-8') as file:  #             json_data = json.load(file)  #  #             json_data = filter_data(json_data)  #  #             for data in json_data:  #                 if data['content']['entryType'] != 'TimelineTimelineItem':  #                     weird_types.add(data['content']['entryType'])  #                     continue  #  #  #                 if get_media(data):  #                     make_post(data)  #  #                 print(data)  #  #                 # break  #  #             print(list(weird_types))  #             # return
 
