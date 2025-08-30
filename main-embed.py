@@ -6,7 +6,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from twitter_utils import *
 
-root_dir = 'json-test'
+root_dir = 'raw/data'
 
 weird_types = set()
 
@@ -53,41 +53,22 @@ Your browser does not support the video tag.
 </figure>"""
 
 
-def make_media_md(post):
+def make_media_md(data):
     elems = []
-    post.get_images()
-    post.get_videos()
-
-    for img in post.get_images():
-        image_url = img['media_url_https']
-        elems.append(make_image_md(image_url))
-
-    for vid in post.get_videos():
-        if video_url := get_video_url(vid):
-            elems.append(make_video_md(video_url, vid['media_url_https'], 'video/mp4'))
-        else:
-            elems.append(vid['media_url_https'])
-
-
-    # print('Generating media for', data)
-    # if media := get_media(data):
-    #     for m in media:
-    #         image_url = m['media_url_https']
-    #         # if not image_url.endswith('.jpg'):
-    #         #     breakpoint()
-    #
-    #         if video_url := get_video_url(data):
-    #             print('\tMake video', video_url)
-    #             elems.append(make_video_md(video_url, image_url, 'video/mp4'))
-    #         # if video_info := m.get('video_info'):
-    #         #     varients = video_info['variants']
-    #         #     # for v in varients:
-    #         #     #     if v['content_type'] == 'video/mp4':
-    #         #     #         # video_url = v['url']
-    #
-    #         else:
-    #             print('\tMake img', image_url)
-    #             elems.append(make_image_md(image_url))
+    if media := get_media(data):
+        for m in media:
+            image_url = m['media_url_https']
+            # if not image_url.endswith('.jpg'):
+            #     breakpoint()
+            if video_info := m.get('video_info'):
+                varients = video_info['variants']
+                # for v in varients:
+                #     if v['content_type'] == 'video/mp4':
+                #         # video_url = v['url']
+                if video_url := get_video_url(data):
+                    elems.append(make_video_md(video_url, image_url, 'video/mp4'))
+            else:
+                elems.append(make_image_md(image_url))
     return '\n'.join(elems)
 
 
@@ -108,12 +89,12 @@ tags:
 <div class="content-container md-sidebar__scrollwrap" markdown="1">
 {post.full_text}
 
-{make_media_md(post)}
+{make_media_md(post.data)}
 </div>
 </div>
 
 <div style="text-align: right;" markdown="1">
-<a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
+<a href="https://twitter.com/realfromis_9/status/{post.post_id}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
 </div>
 ---
 """
@@ -134,15 +115,13 @@ def main():
 
     json_data, all_posts = gather_json_data(root_dir)
 
-    print(f'Generating {len(all_posts)} posts')
-
     i = 0
     for p in all_posts:
         make_post(p)
 
-        # i += 1
-        # if i > 20:
-        #     break
+        i += 1
+        if i > 20:
+            break
 
     # write_all_tags(json_data, 'docs/twitter/tags.md')
 
@@ -150,7 +129,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
 
-    # json_data, all_posts = gather_json_data(root_dir)
-    # download_all_media(all_posts)
+    json_data, all_posts = gather_json_data(root_dir)
+    download_all_media(all_posts)

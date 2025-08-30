@@ -32,8 +32,8 @@ class CustomView(View):
 def on_config(config: MkDocsConfig):
     blog_plugins: list[tuple[str, BlogPlugin]] = [(name, p) for name, p in config.plugins.items() if isinstance(p, BlogPlugin)]
 
-    # for blog_name, blog in blog_plugins:
-    #     blog._generate_categories = types.MethodType(patch_generate_categories, blog)
+    for blog_name, blog in blog_plugins:
+        blog._generate_categories = types.MethodType(patch_generate_categories, blog)
 
     patch_event('files', patch_on_files, config)
     # patch_event('nav', patch_on_nav, config)
@@ -103,38 +103,99 @@ def patch_on_files(self: BlogPlugin, files, *, config):
     self.blog.file.inclusion = InclusionLevel.INCLUDED
 
 def patch_generate_categories(self, config: MkDocsConfig, files: Files):
+    print('generate cat')
+    print('print tags huh')
+    tags_plugin = config.plugins['material/tags']
+    for t in tags_plugin.tags:
+        print(t)
+
+    print(tags_plugin.tags)
+    print(tags_plugin.tags_map)
+
+    path = tags_plugin.config.tags_file
+    # path = os.path.normpath(path)
+
+    # Resolve path relative to docs directory
+    docs = os.path.relpath(config.docs_dir)
+    file = os.path.join(docs, path)
+
+    with open(file, 'r', encoding = "utf-8-sig") as file:
+        tags_txt = file.read()
+        print(tags_txt)
+    print(tags_plugin.config.tags_file)
+
+    print(config.extra.get("tags"))
+
+    file = tags_plugin.config.tags_file
+    if file:
+        tags_file = tags_plugin._get_tags_file(files, file)
+        print(tags_file)
+
     for post in self.blog.posts:
-        authors = post.meta['authors'] if 'authors' in post.meta else []
+        for name in post.config.categories:
+            path = self._format_path_for_category(name)
 
-        for author_cat in post.config.categories:
-            name = f'Comments'
-            path = self._format_path_for_category(f'{author_cat} {name}')
-            if author_cat in members_ids.keys():
-                yield from make_file(name, post, self, files, path, config, CustomView, author_cat)
+            # Ensure category is in non-empty allow list
+            categories = self.config.categories_allowed or [name]
+            if name not in categories:
+                docs = os.path.relpath(config.docs_dir)
+                path = os.path.relpath(post.file.abs_src_path, docs)
+                raise PluginError(f"Error reading categories of post '{path}' in "
+                                  f"'{docs}': category '{name}' not in allow list")
 
-        for author_name, author_id in members_ids.items():
-            # print(post.meta)
-            # print('authors', post.authors)
+            # Create file for view, if it does not exist
+            file = files.get_file_from_path(path)
+            if not file or self.temp_dir not in file.abs_src_path:
+                file = self._path_to_file(path, config)
+                files.append(file)
 
-            if len(authors) == 0:
-                continue
+                # Create file in temporary directory and temporarily remove
+                # from navigation, as we'll add it at a specific location
+                self._save_to_file(file.abs_src_path, f"# {name}")
+                file.inclusion = InclusionLevel.EXCLUDED
 
-            main_author = authors[0]
+            # Create and yield view
+            if not isinstance(file.page, Category):
+                yield Category(name, file, config)
 
-            if main_author != author_id:
-                continue
+            # Assign post to category and vice versa
+            assert isinstance(file.page, Category)
+            file.page.posts.append(post)
+            post.categories.append(file.page)
 
-            if tags := post.meta.get('tags'):
-                # print('my tags', tags)
-                if 'Artist Post' in tags:
-                    name = f'Artist Posts'
-                    path = self._format_path_for_category(f'{author_name} {name}')
-                    yield from make_file(name, post, self, files, path, config, CustomView, ids_to_name[main_author])
 
-                if 'Moment' in tags:
-                    name = f'Moments'
-                    path = self._format_path_for_category(f'{author_name} {name}')
-                    yield from make_file(name, post, self, files, path, config, CustomView, ids_to_name[main_author])
+    # for post in self.blog.posts:
+    #     authors = post.meta['authors'] if 'authors' in post.meta else []
+    #
+    #     for author_cat in post.config.categories:
+    #         name = f'Comments'
+    #         path = self._format_path_for_category(f'{author_cat} {name}')
+    #         if author_cat in members_ids.keys():
+    #             yield from make_file(name, post, self, files, path, config, CustomView, author_cat)
+    #
+    #     for author_name, author_id in members_ids.items():
+    #         # print(post.meta)
+    #         # print('authors', post.authors)
+    #
+    #         if len(authors) == 0:
+    #             continue
+    #
+    #         main_author = authors[0]
+    #
+    #         if main_author != author_id:
+    #             continue
+    #
+    #         if tags := post.meta.get('tags'):
+    #             # print('my tags', tags)
+    #             if 'Artist Post' in tags:
+    #                 name = f'Artist Posts'
+    #                 path = self._format_path_for_category(f'{author_name} {name}')
+    #                 yield from make_file(name, post, self, files, path, config, CustomView, ids_to_name[main_author])
+    #
+    #             if 'Moment' in tags:
+    #                 name = f'Moments'
+    #                 path = self._format_path_for_category(f'{author_name} {name}')
+    #                 yield from make_file(name, post, self, files, path, config, CustomView, ids_to_name[main_author])
 
 def make_file(name, post, blog, files, path, config, type, data):
     categories = blog.config.categories_allowed or [name]
@@ -211,20 +272,20 @@ def patch_on_nav(self, nav, *, config, files):
         if self.blog.file.inclusion.is_in_nav() and views:
             self._attach_to(self.blog, Section(title, views), nav)
 
-    ### BEGIN CUSTOM LOGIC
-    views = [_ for _ in self.blog.views if isinstance(_, CustomView)]
-
-    views_by_title = dict()
-    for v in views:
-        title = v.type
-        views_by_title.setdefault(title, list()).append(v)
-
-    for title, views in views_by_title.items():
-        print(title, views)
-        # Attach and link views for categories, if any
-        if self.blog.file.inclusion.is_in_nav():
-            self._attach_to(self.blog, Section(title, views), nav)
-    ### END CUSTOM LOGIC
+    # ### BEGIN CUSTOM LOGIC
+    # views = [_ for _ in self.blog.views if isinstance(_, CustomView)]
+    #
+    # views_by_title = dict()
+    # for v in views:
+    #     title = v.type
+    #     views_by_title.setdefault(title, list()).append(v)
+    #
+    # for title, views in views_by_title.items():
+    #     print(title, views)
+    #     # Attach and link views for categories, if any
+    #     if self.blog.file.inclusion.is_in_nav():
+    #         self._attach_to(self.blog, Section(title, views), nav)
+    # ### END CUSTOM LOGIC
 
     # Attach pages for views
     if self.config.pagination:
