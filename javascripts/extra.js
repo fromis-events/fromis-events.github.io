@@ -1,4 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Find all table rows with a 'data-href' attribute
+    const rows = document.querySelectorAll('tr[data-href]');
+
+    rows.forEach(row => {
+        // Change the cursor to a pointer on hover to indicate it's clickable
+        row.style.cursor = 'pointer';
+
+        // Add a click event listener
+        row.addEventListener('click', () => {
+            // Navigate to the URL specified in the 'data-href' attribute
+            window.location.href = row.dataset.href;
+        });
+    });
 });
 
 function openFullscreen(imageElement, url) {
