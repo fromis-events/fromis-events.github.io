@@ -66,15 +66,20 @@ def search_twitter(driver, query):
         xhr_hook_script = f.read()
     driver.execute_script(xhr_hook_script)
 
-    # Wait for tweets to appear (initial load)
-    try:
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='tweet']")))
-        print("Search results page loaded.")
+    if 'search?' in query:
+        # Wait for tweets to appear (initial load)
+        try:
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='tweet']")))
+            print("Search results page loaded.")
+            return True
+        except Exception as e:
+            print(
+                f"Could not load search results or find initial tweets: {e}")  # driver.save_screenshot("search_load_error.png")
+            return False
+    else:
+        print('Waiting for 10s')
+        WebDriverWait(driver, 10)
         return True
-    except Exception as e:
-        print(
-            f"Could not load search results or find initial tweets: {e}")  # driver.save_screenshot("search_load_error.png")
-        return False
 
 def parse_search(driver, out_name, search):
     found_tweets = {}  # Use a dictionary with tweet ID as key to store unique tweets
@@ -148,7 +153,7 @@ def generate_json():
         if len(date) == 0:
             continue
 
-        if int(date) > 250500:
+        if int(date) > 250703:
             continue
 
         # continue
@@ -170,13 +175,14 @@ def generate_json():
 def search_account(acc):
     driver = setup_driver()
 
-    link = f'https://x.com/{acc}'
+    link = f'https://x.com/{acc}/media'
     parse_search(driver, acc, link)
 
     driver.quit()
 
 # --- Main Script ---
 if __name__ == "__main__":
-    print('Starting')
+    # print('Starting')
     generate_json()
-    # search_account('suhyun2141')
+    # search_account('tree_0124')
+    # search_account('byfromis_9')

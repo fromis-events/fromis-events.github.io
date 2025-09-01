@@ -178,13 +178,13 @@ def get_downloaded(log_file="downloaded.txt"):
     with open(log_file, "r") as f:
         return set(line.strip() for line in f)
 
-def download_posts(posts, valid):
+def download_posts(posts, invalid_auth):
     downloaded_set = get_downloaded()
 
     failed_ids = get_failed_ids()
 
     for post in posts:
-        if post.author not in valid:
+        if post.author in invalid_auth:
             continue
 
         if post.event_date not in post.full_text:
@@ -236,13 +236,7 @@ def get_failed_ids():
 
 
 def main():
-    rows = utils.get_authors()
-
-    valid = set()
-    for r in rows:
-        if r['Download'] == 'y' and r['Deleted'] != 'y':
-            print(r['Name'])
-            valid.add(r['Name'])
+    invalid_auth = utils.get_invalid_authors()
 
     # download_json()
     # log_authors()
@@ -265,7 +259,7 @@ def main():
     posts = combined.values()
     # log_authors2(posts)
 
-    download_posts(posts, valid)
+    download_posts(posts, invalid_auth)
 
 if __name__ == '__main__':
     main()

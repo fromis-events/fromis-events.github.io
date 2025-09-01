@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import json
 import os
 import shutil
@@ -9,9 +11,26 @@ import pandas as pd
 
 # root_dir = 'json-test'
 
-events_sheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1556948653&single=true&output=tsv'
-
 weird_types = set()
+
+era_dates = [
+    [250625, "From Our 20's"],
+    [240812, 'Supersonic'],
+    [230518, 'Unlock My World'],
+    [220608, 'from our Memento Box'],
+    [200911, 'My Little Society'],
+    [220103, 'Midnight Guest'],
+    [210828, 'Talk & Talk'],
+    [210507, '9 Way Ticket'],
+    [200911, 'My Little Society'],
+    [190522, 'Fun Factory'],
+    [180930, 'From.9'],
+    [180601, 'To. Day'],
+    [180112, 'To. Heart'],
+    [171130, 'Glass Shoes'],
+    [170629, 'Idol School'],
+    [0, 'Pre-Debut'],
+]
 
 
 def make_image_md(url, caption='', zoom_click=True, figure=True):
@@ -171,6 +190,11 @@ def make_youtube_md(url):
 </figure>
 """
 
+# TODO actually embed the tweet
+def make_tweet_md(url):
+    return f'<a href="{url}">{url}</a>'
+
+
 
 def make_event(event_date, posts: list[Post], events_dict):
     if len(posts) == 0:
@@ -181,15 +205,35 @@ def make_event(event_date, posts: list[Post], events_dict):
     out = f"""---
 slug: \"{event_date}\"
 date: {datetime.strptime(event_date, "%y%m%d")}
+hide:
+  - navigation
 ---
 
 # {event_date} {get_event_name(event_date, events_dict)}
 
 """
 
+    has_alt = False
     for e in events:
         out += f'**{e['Eng Name']}**\n\n'
-        out += f'* [Twitter Search]({e['Twitter']}) | [Youtube Search]({e['YouTube']})\n'
+
+        twi_search = e['Twitter']
+        if alt := e.get('Alt 1'):
+            print('Found alt?', alt)
+            if 'x.com/search' in alt:
+                twi_search = alt
+            elif 'x.com' in alt:
+                out += f'* {make_tweet_md(alt)}\n'
+                has_alt = True
+
+        if alt := e.get('Alt 2'):
+            if 'x.com' in alt:
+                out += f'* {make_tweet_md(alt)}\n'
+
+        if has_alt:
+            continue
+
+        out += f'* [Twitter search]({twi_search}) | [YouTube search]({e['YouTube']})\n'
 
         if cam_1 := e.get('Cam 1'):
             out += make_youtube_md(cam_1) + '\n'
@@ -197,6 +241,7 @@ date: {datetime.strptime(event_date, "%y%m%d")}
         if cam_2 := e.get('Cam 2'):
             out += make_youtube_md(cam_2) + '\n'
 
+        out += '\n---\n\n'
         # out += f'# {e['Eng Name']}'
         # print(e)
 
@@ -208,21 +253,23 @@ date: {datetime.strptime(event_date, "%y%m%d")}
         by_author.setdefault(p.author, [])
         by_author[p.author].append(p)
 
-    by_author = dict(sorted(by_author.items(), key=lambda item: len(item[1]), reverse=True))
+    # by_author = dict(sorted(by_author.items(), key=lambda item: len(item[1]), reverse=True))
+    by_author = dict(sorted(by_author.items(), key=lambda item: item[0].lower(), reverse=False))
 
-    for auth, ps in by_author.items():
-        ps = [p for p in ps if p.has_media()]
+    if not has_alt:
+        for auth, ps in by_author.items():
+            ps = [p for p in ps if p.has_media()]
 
-        if len(ps):
-            out += f'## {auth}\n'
+            if len(ps):
+                out += f'## {auth}\n'
 
-            for p in ps:
-                if len(p.get_images()) == 0 and len(p.get_videos()) == 0:
-                    continue
+                for p in ps:
+                    if len(p.get_images()) == 0 and len(p.get_videos()) == 0:
+                        continue
 
-                post_md = make_post_md(p)
-                out += post_md
-                out += '\n'
+                    post_md = make_post_md(p)
+                    out += post_md
+                    out += '\n'
 
     dir = f'docs/events'
     os.makedirs(dir, exist_ok=True)
@@ -234,42 +281,87 @@ date: {datetime.strptime(event_date, "%y%m%d")}
 def make_index(events, events_dict):
     sorted_events = sorted(events)
 
-    out = "# Events\n"
+    # 1. Start with the table header
+    out = f"""---
+hide:
+  - navigation
+---
+
+# Home\n\n
+"""
+
+    current_era = None
 
     for e in sorted_events:
-        out += f"""
-* [**{e}** {get_event_name(e, events_dict)}](./events/{e})
-"""
+        event_date = int(e)
+        event_era = None
+
+        for date, era in era_dates:
+            if event_date >= date:
+                event_era = era
+                break
+        # print(e, event_era, event_date)
+
+        if current_era is not event_era:
+            if current_era:
+                out += '\n\n'
+
+            current_era = event_era
+
+            out += f"## {event_era}\n\n"
+
+            # out += '<div class="center-table">'
+            out += "| Thumbnail | Date |  \n"
+            out += "|:---:|:---|\n"  # Defines alignment (center for thumb, left for text)
+
+
+        # Assumes your script runs from the project root, and 'docs' is a subfolder
+        thumb_path_for_mkdocs = f'assets/thumb/{e}.jpg'
+        thumb_path_on_disk = f'docs/{thumb_path_for_mkdocs}'
+
+        if not os.path.exists(thumb_path_on_disk):
+            print(f'ERROR: No thumbnail found for {thumb_path_on_disk}')
+            print(Path(f"./media/events/{e}").absolute().as_uri())
+            print(f'http://localhost:8000/events/{e}')
+            # print(test.as_uri())
+
+            # You might want to use a placeholder image here
+            image_html = '*(No Thumbnail)*'
+        else:
+            # 2. Use an HTML img tag to control the height
+            # image_html = f'<img src="../{thumb_path_for_mkdocs}" alt="Thumbnail for {e}" style="height: 100px;">'
+            image_html = f'![*(No Thumbnail)*]({thumb_path_for_mkdocs}){{ width="100" }}'
+
+        # 3. Create the text part with the link
+        event_name = get_event_name(e, events_dict)
+        link_markdown = f"[**{e}** {event_name}](./events/{e}){{ loading=lazy }}"
+
+        # 4. Add a new row to the table for this event
+        out += f"| {image_html} | {link_markdown} |\n"
+
+    # out += '</div>'
+    # return out
+
+
+
+
+#     out = "# Events\n"
+#
+#     for e in sorted_events:
+#         thumb_path = f'assets/thumb/{e}.jpg'
+#
+#         if not os.path.exists(f'docs/{thumb_path}'):
+#             print('ERROR no thumbnail found for ', e)
+#
+#         out += f"""
+# * ![]({thumb_path}) [**{e}** {get_event_name(e, events_dict)}](./events/{e})
+# """
 
     with open('docs/index.md', 'w', encoding='utf-8') as txt:
         txt.writelines(out)
 
     # posts_by_event = gather_events(root_dir)
     # for event, posts in posts_by_event.items():
-
-def get_events_dict():
-    df = pd.read_csv(events_sheet, sep='\t', header=0)
-    df = df.where(pd.notnull(df), None)
-
-    # as_dict =
-    # print(as_dict)
-    event_dict = dict()
-
-    for r in df.to_dict(orient="records"):
-        event_dict.setdefault(str(r['Date']), [])
-        event_dict[str(r['Date'])].append(r)
-
-    # current_dates = dict()
-    # for row in df.values:
-    #     if not pd.isna(row[0]):
-    #         event_date = str(row[0])
-    #         event_name = row[1].replace('>', '').replace('<', '')
-    #
-    #         current_dates.setdefault(event_date, [])
-    #         current_dates[event_date].append(event_name)
-    #         # print(row[0], row[1])
-
-    return event_dict
 
 def get_event_name(event, events_dict):
     if events := events_dict.get(event):
@@ -282,20 +374,21 @@ def get_event_name(event, events_dict):
 def main():
     events_dict = get_events_dict()
 
-    if os.path.exists('docs/events'):
-        shutil.rmtree('docs/events')
-    os.makedirs('docs/events')
-
     # json_data, all_posts = gather_json_data(root_dir)
 
-    posts_by_event = gather_posts_by_event(['json-test'])
 
     # these are folders!
-    # posts_by_event = gather_posts_by_event(['json2', 'json'])
+    # posts_by_event = gather_posts_by_event(['json-test'], events_dict)
+    posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
 
     print(f'Generating {len(posts_by_event)} events')
 
     make_index(posts_by_event.keys(), events_dict)
+    # return
+
+    if os.path.exists('docs/events'):
+        shutil.rmtree('docs/events')
+    os.makedirs('docs/events')
 
     i = 0
     for event, posts in posts_by_event.items():

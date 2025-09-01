@@ -8,6 +8,8 @@
     const originalOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url) {
         this.addEventListener("load", function() {
+            console.log(url)
+
             let currentEntries = [];
             if (url.includes('SearchTimeline?')) {
             	console.log(url);
@@ -52,6 +54,25 @@
 //                } catch (e) {
 //                    console.error("Error parsing SearchTimeline:", e, this.responseText);
 //                }
+            }
+            else if (url.includes('UserMedia?'))
+            {
+                console.log(url);
+
+				let parsed = JSON.parse(this.response);
+				console.log(parsed)
+
+
+                let instructions = parsed['data']['user']['result']['timeline']['timeline']['instructions']
+                for (let i of instructions)
+                {
+                    if (i['type'] === 'TimelineAddEntries')
+                    {
+                        let entries = i['entries']
+                        currentEntries = currentEntries.concat(entries);
+//                        console.log('SearchTimeline', entries.length, my_data.data.length);
+                    }
+                }
             }
 
             if (currentEntries.length > 0) {
