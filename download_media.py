@@ -65,11 +65,6 @@ def download_all_media(posts: list[Post]):
 
 
 if __name__ == '__main__':
-    # test = Path("C:/Documents/Projects/fromis-twitter/media/events/")
-    # print(test.as_uri())
-    # print(f'file://{os.path.abspath("C:/Documents/Projects/fromis-twitter/media/events/")}')
-    # main()
-
     events_dict = get_events_dict()
     posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
 

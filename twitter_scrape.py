@@ -36,17 +36,12 @@ def setup_driver():
     # options.add_argument("--disable-dev-shm-usage")
     # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-    profile_path = r"C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\3uj5owbw.default-release"
+    profile_path = rf'{os.getenv("APPDATA")}\Mozilla\Firefox\Profiles\3uj5owbw.default-release'
     options.add_argument("-profile")
     options.add_argument(profile_path)
     service = FirefoxService(GeckoDriverManager().install())
 
-    # firefox_profile = FirefoxProfile(r'C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\i5077kqf.test')
-    # firefox_profile = FirefoxProfile(r'C:\Users\funcp\AppData\Roaming\Mozilla\Firefox\Profiles\3uj5owbw.default-release')
-    # options.profile = firefox_profile
-
     options.set_capability('pageLoadStrategy', 'eager')
-    # driver = webdriver.Firefox(options=options)
     driver = webdriver.Firefox(service=service, options=options)
 
 

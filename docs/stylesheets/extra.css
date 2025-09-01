@@ -1,90 +1,22 @@
-/*!*.post*!*/
-/*!*{*!*/
-/*!*    border-radius: 25px;*!*/
-/*!*    background: #eaf9f7;*!*/
-/*!*    !*border: 2px solid #73AD21;*!*!*/
-/*!*    padding-left: 20px;*!*/
-/*!*    padding-right: 20px;*!*/
-/*!*    padding-top: 1px;*!*/
-/*!*    padding-bottom: 1px;*!*/
-/*!*}*!*/
-
-.comment
-{
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    margin-block-end: 16px;
-}
-
-.comment :last-child
-{
-    margin-block-end: 0;
-}
-
-.comment-body p
-{
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-left: 40px;
-}
-
-.reply
-{
-    margin-block-start: 10px;
-    padding-left: 42px;
-}
-
-.message
-{
-    display: flex;
-}
-
 .no-flex
 {
     display: block;
 }
 
-.message p
-{
-    margin-top: 4px;
-    margin-bottom: 4px;
+/*.md-typeset__table*/
+/*{*/
+/*    width: 100%;*/
+/*}*/
+
+tr {
+    width: 100%;         /* Each row fills the table width */
 }
 
-.message-date
-{
-    margin-right: 8px;
-}
-
-.message-date p
-{
-    margin-block-end: 0;
-    margin-block-start: 2px;
-}
-
-.msg-media
-{
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 2px;
-    margin-block-end: 8px !important;
-    margin-block-start: 8px !important;
-}
-
-.artist
-{
-    /*border-radius: 8px;*/
-    /*background: #7ec394;*/
-    color: #67d68c;
-    /*padding-left: 20px;*/
-    /*padding-right: 20px;*/
-    /*!*padding-top: 1px;*!*/
-    /*!*padding-bottom: 1px;*!*/
-    /*margin-top: 15px;*/
-    /*margin-bottom: 15px;*/
-    /*width: 80%;*/
-    /*margin-left: 0;*/
-    /*margin-right: 0;*/
-}
+/*td {*/
+/*    width: 100%;         !* Each cell fills the row width *!*/
+/*    border: 1px solid black;*/
+/*    padding: 10px;*/
+/*}*/
 
 .md-typeset video
 {
@@ -97,59 +29,6 @@
     max-height: 720px;
     display: block;
     border-radius: 8px; /* Add rounded corners */
-}
-
-.home-grid
-{
-    max-width: 900px; /* max-width of the layout */
-    margin: 0 auto; /* center in the viewport */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
-    grid-auto-rows: auto; /* Set sensible default row height */
-    gap: 0px; /* Spacing between items */
-    justify-items: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-}
-
-.home-link img
-{
-    max-height: 180px;
-    display: block;
-    border-radius: 8px; /* Add rounded corners */
-    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.4); /* Add a subtle shadow */
-    transition: transform 0.1s ease; /* Smooth transition */
-}
-
-.home-link img:hover
-{
-    transform: scale(1.025);
-}
-
-.home-link figcaption
-{
-    /*font-weight: bold;*/
-    font-style: normal;
-    font-size: 16pt
-}
-
-.id-container
-{
-    align-items: center;
-    display: inline-flex;
-    flex-direction: row;
-    /*gap: .2rem;*/
-    margin: 0;
-    min-height: 1rem;
-}
-
-.id-container img
-{
-    float: left;
-    vertical-align: center;
-    max-width: 32px;
-    max-height: 32px;
-    margin-right: 6px;
-    border-radius: 50%;
 }
 
 .artist-img
@@ -167,30 +46,61 @@
     margin-block-start: 0;
 }
 
-.comments-container
-{
-    justify-content: center;
-    width: 80%;
-    max-height: 425px; /* Limit the height */
-    overflow: auto; /* Show scrollbars if content overflows */
-    /*border: 1px solid #ccc; !* Optional, for visibility *!*/
-    padding: 10px;
-    box-sizing: border-box; /* Includes padding in the max-width/height */
-    align-content: center;
-    display: block;
-    margin: auto;
-}
-
 .post-container
 {
     width: 90%;
     justify-content: center;
     align-content: center;
     display: block;
-    margin: auto;
+    margin: 48px;
+    padding: 12px;
+    background: #172727;
+    border-radius: 24px; /* Add rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+.author-container
+{
+    justify-content: center;
+    align-content: center;
+    display: block;
     background: #351463;
     border-radius: 24px; /* Add rounded corners */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    /*margin: 48px 48px;*/
+    margin-top: 48px;
+    margin-bottom: 48px;
+    padding-top: 48px;
+    padding-left: 24px;
+    padding-bottom: 48px;
+}
+
+.author-container h2 {
+    text-align: center;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.post-text-container {
+    /* This establishes the boundary for the float */
+    /*max-width: 600px;*/
+    /*border: 1px solid #ccc;*/
+    /*border-radius: 8px;*/
+    /*background-color: #f9f9f9;*/
+
+    /* This is a modern "clearfix" - it contains the floated element
+       so the container's height properly wraps it. */
+    /*overflow: auto;*/
+    display: flow-root;
+}
+
+.post-link {
+    float: right;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    /*position: absolute;*/
+    /*top: 1px;*/
+    /*right: 1px;*/
 }
 
 .content-container
@@ -282,3 +192,28 @@ iframe {
 .md-typeset table thead {
   display: none;
 }
+
+/* Make the header interactive and set the default (collapsed) state */
+.collapsible-header {
+    cursor: pointer;
+
+    /* Set the default (collapsed) state to normal font weight.
+       This overrides the browser's default bolding for h2, h3, etc. */
+    font-weight: lighter;
+}
+
+/* Set the active (expanded) state to bold */
+.collapsible-header.active {
+    font-weight: normal;
+}
+
+/*.invisible-grid {*/
+/*  display: grid;*/
+/*  grid-template-columns: 1fr 1fr; !* 2 columns *!*/
+/*  gap: 1rem;*/
+/*}*/
+
+/*.invisible-grid > div {*/
+/*  border: none;  !* invisible grid *!*/
+/*  padding: 0;*/
+/*}*/

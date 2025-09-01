@@ -67,7 +67,10 @@ def get_full_text(data):
     # pattern = r'(#[\w\uAC00-\uD7A3]+)'
     pattern = r'#([\w\uAC00-\uD7A3]+)'
     # full_text = re.sub(pattern, r'[\1](tags/\1)', full_text)
-    full_text = re.sub(pattern, r'[\1](https://x.com/hashtag/\1)', full_text)
+    full_text = re.sub(pattern, r'[\#\1](https://x.com/hashtag/\1)', full_text)
+
+    at_pattern = r'(@[\w\uAC00-\uD7A3]+)'
+    full_text = re.sub(at_pattern, r'[\1](https://x.com/\1)', full_text)
 
     # full_text.replace('#', '\\#')
 

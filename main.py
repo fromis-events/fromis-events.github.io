@@ -49,7 +49,7 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
     if figure:
         return f"""\
 <figure markdown="1">
-![]({low_res_url}){{ loading=lazy {zoom_md}"}}{caption}
+![]({low_res_url}){{ loading=lazy {zoom_md} class="post-image""}}{caption}
 </figure>"""
     else:
         return f'![]({low_res_url}){{ loading=lazy {zoom_md}"}}{caption}'
@@ -115,65 +115,90 @@ def make_media_md(post):
     #         else:
     #             print('\tMake img', image_url)
     #             elems.append(make_image_md(image_url))
-    return '\n'.join(elems)
+
+    grid = '<div class="invisible-grid" markdown="1">\n'
+    grid += '\n'.join(elems)
+    grid += '\n</div>'
+
+    # grid += '\n'.join(f'  <div>{e}</div>' for e in elems)
+    # grid += '\n'.join(f'  <div>{e}</div>' for e in elems)
+    # grid += '\n</div>'
+    return grid
+
+    # return '\n'.join(elems)
 
 
 def make_post_md(post: Post):
     # tags = get_tags(post.data)
     # tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
 
+    post_link = f"""
+<div class="post-link" style="text-align: right;" markdown="1">
+<a href="{post.link}" style="text-align: right;">:material-twitter:{{.big-emoji}}</a>
+</div>
+"""
+
+    post_text_and_link = f"""
+<div class="post-text-container" markdown="1">
+{post.full_text}
+</div>
+"""
+
+    post_media = f"""
+<div class="post-media-container" markdown="1">
+{make_media_md(post)}
+{post_link}
+</div>
+"""
+
+
     out = f"""
 <div class="post-container" markdown="1">
-<div class="content-container md-sidebar__scrollwrap" markdown="1">
-{post.full_text}
-
-{make_media_md(post)}
+<div class="content-container" markdown="1">
+{post_text_and_link}
+{post_media}
 </div>
-</div>
-
-<div style="text-align: right;" markdown="1">
-<a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
 </div>
 """
-    
+
     return out
 
-def make_post(event_date, post: Post):
-    tags = get_tags(post.data)
-    tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
-
-    out = f"""---
-slug: \"{post.post_id}\"
-date: {post.date}
-tags:
-{tags_md}
----
-
-# {post.post_id}
-
-<div class="post-container" markdown="1">
-<div class="content-container md-sidebar__scrollwrap" markdown="1">
-{post.full_text}
-
-{make_media_md(post)}
-</div>
-</div>
-
-<div style="text-align: right;" markdown="1">
-<a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
-</div>
----
-"""
-
-    # if media := get_media(data):
-    #     for m in media:
-
-    dir = f'docs/twitter/events/{event_date}/posts'
-    os.makedirs(dir, exist_ok=True)
-    out_path = f'{dir}/{post.post_id}.md'
-
-    with open(out_path, 'w', encoding='utf-8') as txt:
-        txt.writelines(out)
+# def make_post(event_date, post: Post):
+#     tags = get_tags(post.data)
+#     tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
+#
+#     out = f"""---
+# slug: \"{post.post_id}\"
+# date: {post.date}
+# tags:
+# {tags_md}
+# ---
+#
+# # {post.post_id}
+#
+# <div class="post-container" markdown="1">
+# <div class="content-container md-sidebar__scrollwrap" markdown="1">
+# {post.full_text}
+#
+# {make_media_md(post)}
+# </div>
+# </div>
+#
+# <div style="text-align: right;" markdown="1">
+# <a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
+# </div>
+# ---
+# """
+#
+#     # if media := get_media(data):
+#     #     for m in media:
+#
+#     dir = f'docs/twitter/events/{event_date}/posts'
+#     os.makedirs(dir, exist_ok=True)
+#     out_path = f'{dir}/{post.post_id}.md'
+#
+#     with open(out_path, 'w', encoding='utf-8') as txt:
+#         txt.writelines(out)
 
 def make_youtube_md(url):
     embed_url = url.replace('watch?v=', 'embed/')
@@ -256,11 +281,18 @@ hide:
     # by_author = dict(sorted(by_author.items(), key=lambda item: len(item[1]), reverse=True))
     by_author = dict(sorted(by_author.items(), key=lambda item: item[0].lower(), reverse=False))
 
+
     if not has_alt:
+        first_auth = True
         for auth, ps in by_author.items():
             ps = [p for p in ps if p.has_media()]
 
             if len(ps):
+                if not first_auth:
+                    out += '\n</div>\n\n'
+                first_auth = False
+
+                out += f'<div class="author-container" markdown="1">\n'
                 out += f'## {auth}\n'
 
                 for p in ps:
@@ -374,9 +406,6 @@ def get_event_name(event, events_dict):
 def main():
     events_dict = get_events_dict()
 
-    # json_data, all_posts = gather_json_data(root_dir)
-
-
     # these are folders!
     # posts_by_event = gather_posts_by_event(['json-test'], events_dict)
     posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
@@ -384,26 +413,13 @@ def main():
     print(f'Generating {len(posts_by_event)} events')
 
     make_index(posts_by_event.keys(), events_dict)
-    # return
 
     if os.path.exists('docs/events'):
         shutil.rmtree('docs/events')
     os.makedirs('docs/events')
 
-    i = 0
     for event, posts in posts_by_event.items():
         make_event(event, posts, events_dict)
-        # for p in posts:
-        #     make_post(event, p)
-
-        # i += 1
-        # if i > 20:
-        #     break
-
-    # write_all_tags(posts_by_event, 'docs/events/tags.md')
-
-    # files = os.listdir(root_dir)  #  # shutil.rmtree('docs/twitter/posts')  # os.makedirs('docs/twitter/posts')  #  # for f in files:  #     if f.endswith('.json') and f.startswith('final'):  #         path = f'{root_dir}/{f}'  #         with open(path, 'r', encoding='utf-8') as file:  #             json_data = json.load(file)  #  #             json_data = filter_data(json_data)  #  #             for data in json_data:  #                 if data['content']['entryType'] != 'TimelineTimelineItem':  #                     weird_types.add(data['content']['entryType'])  #                     continue  #  #  #                 if get_media(data):  #                     make_post(data)  #  #                 print(data)  #  #                 # break  #  #             print(list(weird_types))  #             # return
-
 
 if __name__ == '__main__':
     main()
