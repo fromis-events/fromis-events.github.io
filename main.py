@@ -39,9 +39,17 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
     if caption:
         caption = f'<figcaption>{caption}</figcaption>'
 
-    base_url = url.rsplit('.', maxsplit=1)[0]
+    split = url.rsplit('.', maxsplit=1)
+    base_url = split[0]
+    ext = 'jpg'
+    if len(split) > 1:
+        ext = split[1]
 
-    low_res_url = base_url + '?format=jpg&name=medium'
+    if ext == 'png':
+        print('Loading url', base_url, ext)
+
+    low_res_url = base_url + '?format=jpg&name=small'
+    orig_url = base_url + f'?format={ext}&name=orig'
 
     # TODO why doesn't this format work??
 #     return f'''
@@ -49,7 +57,7 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
 # '''
 
     return f'''
-<a class="glightbox" href="{url}" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery{gallery_index}">
+<a class="glightbox" href="{orig_url}" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery{gallery_index}">
 <img alt="" data-gallery="gallery{gallery_index}" loading="lazy" src="{low_res_url}">
 </a>
 '''
@@ -87,10 +95,6 @@ def make_media_md(post):
     for img in post.get_images():
         image_url = img['media_url_https']
         elems.append(make_image_md(image_url))
-
-    if len(post.get_images()):
-        global gallery_index
-        gallery_index += 1
 
     # if len(post.get_videos()) > 1:
     #     print('FOUND MULTI VID')
@@ -277,6 +281,9 @@ hide:
                     post_md = make_post_md(p)
                     out += post_md
                     out += '\n'
+
+                global gallery_index
+                gallery_index += 1
 
     dir = f'docs/events'
     os.makedirs(dir, exist_ok=True)
