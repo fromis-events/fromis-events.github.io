@@ -52,15 +52,15 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
     orig_url = base_url + f'?format={ext}&name=orig'
 
     # TODO why doesn't this format work??
-#     return f'''
-# ![]({low_res_url}){{ loading=lazy data-gallery="gallery{gallery_index}" src="{url}" }}
-# '''
-
     return f'''
-<a class="glightbox" href="{orig_url}" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery{gallery_index}">
-<img alt="" data-gallery="gallery{gallery_index}" loading="lazy" src="{low_res_url}">
-</a>
+![]({orig_url}){{ loading=lazy data-gallery="gallery{gallery_index}" srcset="{low_res_url}" }}
 '''
+
+#     return f'''
+# <a class="glightbox" href="{orig_url}" data-gallery="gallery{gallery_index}">
+# <img alt="" data-gallery="gallery{gallery_index}" loading="lazy" src="{low_res_url}">
+# </a>
+# '''
 
 def make_iframe_md(embed_url, display_url=None):
     if display_url is None:
@@ -128,8 +128,8 @@ def make_media_md(post):
     #             print('\tMake img', image_url)
     #             elems.append(make_image_md(image_url))
 
-    grid = '<div class="media-grid" markdown="1">\n'
-    grid += '\n'.join(elems)
+    grid = '<div class="grid" markdown="1">\n'
+    grid += '\n'.join([f'<div class="grid-item" markdown="1">{e}</div>' for e in elems])
     grid += '\n</div>'
 
     # grid += '\n'.join(f'  <div>{e}</div>' for e in elems)
