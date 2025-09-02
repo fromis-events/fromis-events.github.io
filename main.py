@@ -147,7 +147,6 @@ def make_post_md(post: Post):
     post_media = f"""
 <div class="post-media-container" markdown="1">
 {make_media_md(post)}
-{post_link}
 </div>
 """
 
@@ -158,47 +157,11 @@ def make_post_md(post: Post):
 {post_text_and_link}
 {post_media}
 </div>
+{post_link}
 </div>
 """
 
     return out
-
-# def make_post(event_date, post: Post):
-#     tags = get_tags(post.data)
-#     tags_md = '\n'.join(['  - ' + t.removeprefix('#') for t in tags])
-#
-#     out = f"""---
-# slug: \"{post.post_id}\"
-# date: {post.date}
-# tags:
-# {tags_md}
-# ---
-#
-# # {post.post_id}
-#
-# <div class="post-container" markdown="1">
-# <div class="content-container md-sidebar__scrollwrap" markdown="1">
-# {post.full_text}
-#
-# {make_media_md(post)}
-# </div>
-# </div>
-#
-# <div style="text-align: right;" markdown="1">
-# <a href="{post.link}" style="text-align: right;">:material-share:{{.big-emoji}}</a>
-# </div>
-# ---
-# """
-#
-#     # if media := get_media(data):
-#     #     for m in media:
-#
-#     dir = f'docs/twitter/events/{event_date}/posts'
-#     os.makedirs(dir, exist_ok=True)
-#     out_path = f'{dir}/{post.post_id}.md'
-#
-#     with open(out_path, 'w', encoding='utf-8') as txt:
-#         txt.writelines(out)
 
 def make_youtube_md(url):
     embed_url = url.replace('watch?v=', 'embed/')
