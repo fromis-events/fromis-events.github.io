@@ -147,7 +147,6 @@ def make_post_md(post: Post):
     post_media = f"""
 <div class="post-media-container" markdown="1">
 {make_media_md(post)}
-{post_link}
 </div>
 """
 
@@ -158,6 +157,7 @@ def make_post_md(post: Post):
 {post_text_and_link}
 {post_media}
 </div>
+{post_link}
 </div>
 """
 
