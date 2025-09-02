@@ -48,6 +48,8 @@
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
+      <link rel="stylesheet" href="../../stylesheets/glightbox.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -55,7 +57,16 @@
     
     
     
-  </head>
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: none; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -146,6 +157,45 @@
         
 
         <!-- Button to open search modal -->
+        
+        <label class="md-header__button md-icon" for="__search">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+
+        <!-- Search interface -->
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         
 
         <!-- Repository information -->
@@ -12278,7 +12328,7 @@
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1565742279662653440/pu/img/-PDSZ7FVW6mfRiFS.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1565742279662653440/pu/vid/1280x720/fLm6XYN08G8-0G_b.mp4?tag=12" type="video/mp4">
@@ -12299,13 +12349,13 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbqf5eeaAAA7BUK.jpg')" src="https://pbs.twimg.com/media/Fbqf5eeaAAA7BUK?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbqf5zFagAIrtHC.jpg')" src="https://pbs.twimg.com/media/Fbqf5zFagAIrtHC?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbqf5eeaAAA7BUK.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27916">
+<img alt="" data-gallery="gallery27916" loading="lazy" src="https://pbs.twimg.com/media/Fbqf5eeaAAA7BUK?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbqf5zFagAIrtHC.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27916">
+<img alt="" data-gallery="gallery27916" loading="lazy" src="https://pbs.twimg.com/media/Fbqf5zFagAIrtHC?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12328,7 +12378,7 @@ Interview in replies ↓<br>
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a>   <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a>    <a href="https://x.com/hashtag/プロミスナイン">#プロミスナイン</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1565666257520988162/pu/img/mSSSigxByY50paDq.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1565666257520988162/pu/vid/720x1280/2ARDJgD0Ugf0sLR0.mp4?tag=12" type="video/mp4">
@@ -12355,13 +12405,13 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/이채영">#이채영</a> <a href="https://x.com/hashtag/CHAEYOUNG">#CHAEYOUNG</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcDhCNWacAAjqyl.jpg')" src="https://pbs.twimg.com/media/FcDhCNWacAAjqyl?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcDhCNjaAAA9e9q.jpg')" src="https://pbs.twimg.com/media/FcDhCNjaAAA9e9q?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcDhCNWacAAjqyl.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27917">
+<img alt="" data-gallery="gallery27917" loading="lazy" src="https://pbs.twimg.com/media/FcDhCNWacAAjqyl?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcDhCNjaAAA9e9q.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27917">
+<img alt="" data-gallery="gallery27917" loading="lazy" src="https://pbs.twimg.com/media/FcDhCNjaAAA9e9q?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12379,13 +12429,13 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/이채영">#이채영</a> <a href="https://x.com/hashtag/CHAEYOUNG">#CHAEYOUNG</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcDemzZaAAYKDZK.jpg')" src="https://pbs.twimg.com/media/FcDemzZaAAYKDZK?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcDemzSaIAASb_o.jpg')" src="https://pbs.twimg.com/media/FcDemzSaIAASb_o?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcDemzZaAAYKDZK.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27918">
+<img alt="" data-gallery="gallery27918" loading="lazy" src="https://pbs.twimg.com/media/FcDemzZaAAYKDZK?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcDemzSaIAASb_o.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27918">
+<img alt="" data-gallery="gallery27918" loading="lazy" src="https://pbs.twimg.com/media/FcDemzSaIAASb_o?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12404,7 +12454,7 @@ Your browser does not support the video tag.
 8K Full -&gt; <a href="https://youtu.be/658hOxDygNs">https://youtu.be/658hOxDygNs</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1567156441789898753/pu/img/ikzpJNFnH4_I-sqy.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1567156441789898753/pu/vid/1280x720/EB7UP-0tIcFAl_sE.mp4?tag=12" type="video/mp4">
@@ -12426,7 +12476,7 @@ Your browser does not support the video tag.
 8K Full -&gt; <a href="https://youtu.be/OwGbl3ngE3c">https://youtu.be/OwGbl3ngE3c</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1567121937452920832/pu/img/ONaqQRX00WYKU382.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1567121937452920832/pu/vid/1280x720/Ac1hGo9HKGekG3_J.mp4?tag=12" type="video/mp4">
@@ -12448,7 +12498,7 @@ Your browser does not support the video tag.
 8K Full -&gt; <a href="https://youtu.be/jEGvWFtl0tw">https://youtu.be/jEGvWFtl0tw</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566962768926101510/pu/img/mBxeS8PrZ49Yi3Ve.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566962768926101510/pu/vid/1280x720/I-_C3_hQqutLAJtS.mp4?tag=12" type="video/mp4">
@@ -12470,7 +12520,7 @@ Your browser does not support the video tag.
 8K Full -&gt; <a href="https://youtu.be/Coa3A96Zmbc">https://youtu.be/Coa3A96Zmbc</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566793831739457537/pu/img/IDWcJVtNoTaQR0Nm.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566793831739457537/pu/vid/1280x720/sVtBdadhV0iyyX9R.mp4?tag=12" type="video/mp4">
@@ -12492,7 +12542,7 @@ Your browser does not support the video tag.
 8K Full -&gt; <a href="https://youtu.be/YXjzyO6G2tY">https://youtu.be/YXjzyO6G2tY</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566425150870142976/pu/img/WwcIYbJPCvFN5bGN.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566425150870142976/pu/vid/1280x720/38eBX0vbcxhNI6K7.mp4?tag=12" type="video/mp4">
@@ -12520,10 +12570,10 @@ Your browser does not support the video tag.
  <a href="https://x.com/hashtag/박지원">#박지원</a>              <a href="https://x.com/hashtag/JIWON">#JIWON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbwC8jjaMAAh3Ij.jpg')" src="https://pbs.twimg.com/media/FbwC8jjaMAAh3Ij?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbwC8jjaMAAh3Ij.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27919">
+<a class="glightbox" href="https://pbs.twimg.com/media/FbwC8jjaMAAh3Ij?format=jpg&name=medium" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27919"><img alt="" data-gallery="gallery27919" loading="lazy" src="https://pbs.twimg.com/media/FbwC8jjaMAAh3Ij?format=jpg&name=medium"></a>
+</a></p>
 </div>
 </div>
 </div>
@@ -12542,13 +12592,13 @@ Your browser does not support the video tag.
  <a href="https://x.com/hashtag/박지원">#박지원</a>              <a href="https://x.com/hashtag/JIWON">#JIWON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp699qaAAECBVR.jpg')" src="https://pbs.twimg.com/media/Fbp699qaAAECBVR?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp699naIAA9BzN.jpg')" src="https://pbs.twimg.com/media/Fbp699naIAA9BzN?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp699qaAAECBVR.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27920">
+<img alt="" data-gallery="gallery27920" loading="lazy" src="https://pbs.twimg.com/media/Fbp699qaAAECBVR?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp699naIAA9BzN.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27920">
+<img alt="" data-gallery="gallery27920" loading="lazy" src="https://pbs.twimg.com/media/Fbp699naIAA9BzN?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12566,7 +12616,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566200119636045824/pu/img/pyqkz9R0KDIZ10N4.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566200119636045824/pu/vid/1280x720/6L7iO49ORV1f3RsJ.mp4?tag=12" type="video/mp4">
@@ -12587,7 +12637,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566198133096267776/pu/img/OUiUkirKJlapDaDA.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566198133096267776/pu/vid/1280x720/4TIwUYMxB97pXKBJ.mp4?tag=12" type="video/mp4">
@@ -12608,7 +12658,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566195813952286720/pu/img/odD1OzbbHNiE1dJs.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566195813952286720/pu/vid/1280x720/dAsH3nR1z5b1dEPL.mp4?tag=12" type="video/mp4">
@@ -12631,13 +12681,13 @@ Your browser does not support the video tag.
 <p>220902 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/박지원">#박지원</a> <a href="https://x.com/hashtag/parkjiwon">#parkjiwon</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb5ecN6aUAEFn0k.jpg')" src="https://pbs.twimg.com/media/Fb5ecN6aUAEFn0k?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb5ecOkaQAADh8s.jpg')" src="https://pbs.twimg.com/media/Fb5ecOkaQAADh8s?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb5ecN6aUAEFn0k.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27921">
+<img alt="" data-gallery="gallery27921" loading="lazy" src="https://pbs.twimg.com/media/Fb5ecN6aUAEFn0k?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb5ecOkaQAADh8s.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27921">
+<img alt="" data-gallery="gallery27921" loading="lazy" src="https://pbs.twimg.com/media/Fb5ecOkaQAADh8s?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12653,19 +12703,19 @@ Your browser does not support the video tag.
 침수 폰📱</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqBQ8saIAEdg7T.jpg')" src="https://pbs.twimg.com/media/FbqBQ8saIAEdg7T?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqBQ8takAATnDb.jpg')" src="https://pbs.twimg.com/media/FbqBQ8takAATnDb?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqBQ8taQAEo-Pb.jpg')" src="https://pbs.twimg.com/media/FbqBQ8taQAEo-Pb?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqBQ8uakAAxVm9.jpg')" src="https://pbs.twimg.com/media/FbqBQ8uakAAxVm9?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqBQ8saIAEdg7T.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27922">
+<img alt="" data-gallery="gallery27922" loading="lazy" src="https://pbs.twimg.com/media/FbqBQ8saIAEdg7T?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqBQ8takAATnDb.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27922">
+<img alt="" data-gallery="gallery27922" loading="lazy" src="https://pbs.twimg.com/media/FbqBQ8takAATnDb?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqBQ8taQAEo-Pb.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27922">
+<img alt="" data-gallery="gallery27922" loading="lazy" src="https://pbs.twimg.com/media/FbqBQ8taQAEo-Pb?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqBQ8uakAAxVm9.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27922">
+<img alt="" data-gallery="gallery27922" loading="lazy" src="https://pbs.twimg.com/media/FbqBQ8uakAAxVm9?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12686,13 +12736,13 @@ Your browser does not support the video tag.
 가로세로</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbvYHsPVEAE7Ggm.jpg')" src="https://pbs.twimg.com/media/FbvYHsPVEAE7Ggm?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbvYJfZVEAA5Jm3.jpg')" src="https://pbs.twimg.com/media/FbvYJfZVEAA5Jm3?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbvYHsPVEAE7Ggm.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27923">
+<img alt="" data-gallery="gallery27923" loading="lazy" src="https://pbs.twimg.com/media/FbvYHsPVEAE7Ggm?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbvYJfZVEAA5Jm3.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27923">
+<img alt="" data-gallery="gallery27923" loading="lazy" src="https://pbs.twimg.com/media/FbvYJfZVEAA5Jm3?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12708,19 +12758,19 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/송하영">#송하영</a> <a href="https://x.com/hashtag/hayoung">#hayoung</a> <a href="https://x.com/hashtag/ハヨン">#ハヨン</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp17MHUIAAYMeh.jpg')" src="https://pbs.twimg.com/media/Fbp17MHUIAAYMeh?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp17lAVEAAZqO-.jpg')" src="https://pbs.twimg.com/media/Fbp17lAVEAAZqO-?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp179EVUAIv9IY.jpg')" src="https://pbs.twimg.com/media/Fbp179EVUAIv9IY?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp18YkVEAAkeHD.jpg')" src="https://pbs.twimg.com/media/Fbp18YkVEAAkeHD?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp17MHUIAAYMeh.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27924">
+<img alt="" data-gallery="gallery27924" loading="lazy" src="https://pbs.twimg.com/media/Fbp17MHUIAAYMeh?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp17lAVEAAZqO-.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27924">
+<img alt="" data-gallery="gallery27924" loading="lazy" src="https://pbs.twimg.com/media/Fbp17lAVEAAZqO-?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp179EVUAIv9IY.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27924">
+<img alt="" data-gallery="gallery27924" loading="lazy" src="https://pbs.twimg.com/media/Fbp179EVUAIv9IY?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp18YkVEAAkeHD.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27924">
+<img alt="" data-gallery="gallery27924" loading="lazy" src="https://pbs.twimg.com/media/Fbp18YkVEAAkeHD?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12741,7 +12791,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/백지헌">#백지헌</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1567332526590672896/pu/img/rm1ncDCeI4Dtq8Gy.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1567332526590672896/pu/vid/1280x720/aRVtdk41I41QoOVI.mp4?tag=12" type="video/mp4">
@@ -12766,7 +12816,7 @@ Your browser does not support the video tag.
 ‹ <a href="https://x.com/hashtag/노지선">#노지선</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a>  <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> ›</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566291874486161408/pu/img/165GWH-fWfvedVYZ.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566291874486161408/pu/vid/1280x592/5Mxva2epSgt84VVm.mp4?tag=12" type="video/mp4">
@@ -12788,7 +12838,7 @@ Your browser does not support the video tag.
 ‹ <a href="https://x.com/hashtag/노지선">#노지선</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a>  <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> ›</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566291653429641217/pu/img/lUKo7ww3EtnTKMeo.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566291653429641217/pu/vid/1280x592/HZ2tC2gc7O5kzcXH.mp4?tag=12" type="video/mp4">
@@ -12814,10 +12864,10 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/박지원">#박지원</a>        <a href="https://x.com/hashtag/박메건">#박메건</a>        <a href="https://x.com/hashtag/jiwon">#jiwon</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbvUHQhaAAAOx2G.jpg')" src="https://pbs.twimg.com/media/FbvUHQhaAAAOx2G?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbvUHQhaAAAOx2G.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27925">
+<a class="glightbox" href="https://pbs.twimg.com/media/FbvUHQhaAAAOx2G?format=jpg&name=medium" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27925"><img alt="" data-gallery="gallery27925" loading="lazy" src="https://pbs.twimg.com/media/FbvUHQhaAAAOx2G?format=jpg&name=medium"></a>
+</a></p>
 </div>
 </div>
 </div>
@@ -12839,10 +12889,10 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/박지원">#박지원</a>        <a href="https://x.com/hashtag/박메건">#박메건</a>        <a href="https://x.com/hashtag/jiwon">#jiwon</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbtEnbbagAEqcvq.jpg')" src="https://pbs.twimg.com/media/FbtEnbbagAEqcvq?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbtEnbbagAEqcvq.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27926">
+<a class="glightbox" href="https://pbs.twimg.com/media/FbtEnbbagAEqcvq?format=jpg&name=medium" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27926"><img alt="" data-gallery="gallery27926" loading="lazy" src="https://pbs.twimg.com/media/FbtEnbbagAEqcvq?format=jpg&name=medium"></a>
+</a></p>
 </div>
 </div>
 </div>
@@ -12859,10 +12909,10 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/박지원">#박지원</a>        <a href="https://x.com/hashtag/박메건">#박메건</a>        <a href="https://x.com/hashtag/jiwon">#jiwon</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp5XVVagAE-Sbk.jpg')" src="https://pbs.twimg.com/media/Fbp5XVVagAE-Sbk?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp5XVVagAE-Sbk.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27927">
+<a class="glightbox" href="https://pbs.twimg.com/media/Fbp5XVVagAE-Sbk?format=jpg&name=medium" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27927"><img alt="" data-gallery="gallery27927" loading="lazy" src="https://pbs.twimg.com/media/Fbp5XVVagAE-Sbk?format=jpg&name=medium"></a>
+</a></p>
 </div>
 </div>
 </div>
@@ -12883,16 +12933,16 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp21FYUcAIcF0I.jpg')" src="https://pbs.twimg.com/media/Fbp21FYUcAIcF0I?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp22BiVsAA1cO7.jpg')" src="https://pbs.twimg.com/media/Fbp22BiVsAA1cO7?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp23D1VUAA0D3r.jpg')" src="https://pbs.twimg.com/media/Fbp23D1VUAA0D3r?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp21FYUcAIcF0I.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27928">
+<img alt="" data-gallery="gallery27928" loading="lazy" src="https://pbs.twimg.com/media/Fbp21FYUcAIcF0I?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp22BiVsAA1cO7.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27928">
+<img alt="" data-gallery="gallery27928" loading="lazy" src="https://pbs.twimg.com/media/Fbp22BiVsAA1cO7?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp23D1VUAA0D3r.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27928">
+<img alt="" data-gallery="gallery27928" loading="lazy" src="https://pbs.twimg.com/media/Fbp23D1VUAA0D3r?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12909,13 +12959,13 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <p>220902 🔥🌧 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a>  <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a> <a href="https://x.com/hashtag/FROMIS_9">#FROMIS_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FdvfeplagAEukZB.jpg')" src="https://pbs.twimg.com/media/FdvfeplagAEukZB?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FdvffSPacAAHiTb.jpg')" src="https://pbs.twimg.com/media/FdvffSPacAAHiTb?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FdvfeplagAEukZB.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27929">
+<img alt="" data-gallery="gallery27929" loading="lazy" src="https://pbs.twimg.com/media/FdvfeplagAEukZB?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FdvffSPacAAHiTb.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27929">
+<img alt="" data-gallery="gallery27929" loading="lazy" src="https://pbs.twimg.com/media/FdvffSPacAAHiTb?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12930,13 +12980,13 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a>     <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a> <a href="https://x.com/hashtag/FROMIS_9">#FROMIS_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp9UX6VUAEratP.jpg')" src="https://pbs.twimg.com/media/Fbp9UX6VUAEratP?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp9UYGVsAEorbw.jpg')" src="https://pbs.twimg.com/media/Fbp9UYGVsAEorbw?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp9UX6VUAEratP.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27930">
+<img alt="" data-gallery="gallery27930" loading="lazy" src="https://pbs.twimg.com/media/Fbp9UX6VUAEratP?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp9UYGVsAEorbw.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27930">
+<img alt="" data-gallery="gallery27930" loading="lazy" src="https://pbs.twimg.com/media/Fbp9UYGVsAEorbw?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -12957,10 +13007,10 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 🖇 : <a href="https://mdpr.jp/interview/detail/3328992">https://mdpr.jp/interview/detail/3328992</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbo_9DpVEAEfwny.jpg')" src="https://pbs.twimg.com/media/Fbo_9DpVEAEfwny?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbo_9DpVEAEfwny.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27931">
+<a class="glightbox" href="https://pbs.twimg.com/media/Fbo_9DpVEAEfwny?format=jpg&name=medium" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27931"><img alt="" data-gallery="gallery27931" loading="lazy" src="https://pbs.twimg.com/media/Fbo_9DpVEAEfwny?format=jpg&name=medium"></a>
+</a></p>
 </div>
 </div>
 </div>
@@ -12982,13 +13032,13 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FqOJ5lYXwAEACwf.jpg')" src="https://pbs.twimg.com/media/FqOJ5lYXwAEACwf?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FqOJ5lYWcAA4sds.jpg')" src="https://pbs.twimg.com/media/FqOJ5lYWcAA4sds?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FqOJ5lYXwAEACwf.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27932">
+<img alt="" data-gallery="gallery27932" loading="lazy" src="https://pbs.twimg.com/media/FqOJ5lYXwAEACwf?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FqOJ5lYWcAA4sds.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27932">
+<img alt="" data-gallery="gallery27932" loading="lazy" src="https://pbs.twimg.com/media/FqOJ5lYWcAA4sds?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13007,13 +13057,13 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb26GQyacAAz-_O.jpg')" src="https://pbs.twimg.com/media/Fb26GQyacAAz-_O?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb26GQyaIAAQNnC.jpg')" src="https://pbs.twimg.com/media/Fb26GQyaIAAQNnC?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb26GQyacAAz-_O.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27933">
+<img alt="" data-gallery="gallery27933" loading="lazy" src="https://pbs.twimg.com/media/Fb26GQyacAAz-_O?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb26GQyaIAAQNnC.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27933">
+<img alt="" data-gallery="gallery27933" loading="lazy" src="https://pbs.twimg.com/media/Fb26GQyaIAAQNnC?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13032,13 +13082,13 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqCI1AaQAAcMrq.jpg')" src="https://pbs.twimg.com/media/FbqCI1AaQAAcMrq?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqCI0-acAAS5zT.jpg')" src="https://pbs.twimg.com/media/FbqCI0-acAAS5zT?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqCI1AaQAAcMrq.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27934">
+<img alt="" data-gallery="gallery27934" loading="lazy" src="https://pbs.twimg.com/media/FbqCI1AaQAAcMrq?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqCI0-acAAS5zT.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27934">
+<img alt="" data-gallery="gallery27934" loading="lazy" src="https://pbs.twimg.com/media/FbqCI0-acAAS5zT?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13057,19 +13107,19 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/fromis_9">#fromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_DZBakAApu_0.jpg')" src="https://pbs.twimg.com/media/Fbp_DZBakAApu_0?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_DZDaUAIXjO7.jpg')" src="https://pbs.twimg.com/media/Fbp_DZDaUAIXjO7?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_DY-aUAEb51N.jpg')" src="https://pbs.twimg.com/media/Fbp_DY-aUAEb51N?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_DZBagAEKMPA.jpg')" src="https://pbs.twimg.com/media/Fbp_DZBagAEKMPA?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_DZBakAApu_0.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27935">
+<img alt="" data-gallery="gallery27935" loading="lazy" src="https://pbs.twimg.com/media/Fbp_DZBakAApu_0?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_DZDaUAIXjO7.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27935">
+<img alt="" data-gallery="gallery27935" loading="lazy" src="https://pbs.twimg.com/media/Fbp_DZDaUAIXjO7?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_DY-aUAEb51N.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27935">
+<img alt="" data-gallery="gallery27935" loading="lazy" src="https://pbs.twimg.com/media/Fbp_DY-aUAEb51N?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_DZBagAEKMPA.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27935">
+<img alt="" data-gallery="gallery27935" loading="lazy" src="https://pbs.twimg.com/media/Fbp_DZBagAEKMPA?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13093,7 +13143,7 @@ WE GO: <a href="https://youtu.be/4LGC6jrw-QM">https://youtu.be/4LGC6jrw-QM</a><b
 <a href="https://x.com/@realfromis_9">@realfromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566799652808458241/pu/img/h-J764rJXDxg3TQX.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566799652808458241/pu/vid/1280x676/Oy4broYCVBEnwmoz.mp4?tag=12" type="video/mp4">
@@ -13120,7 +13170,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/@realfromis_9">@realfromis_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566236112775151616/pu/img/0CSPSM06UR7qe9wZ.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566236112775151616/pu/vid/1280x676/h8LnZxF-t8QpKwRO.mp4?tag=12" type="video/mp4">
@@ -13142,16 +13192,16 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/FROMIS_9">#FROMIS_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqTr-KVEAAMyg6.jpg')" src="https://pbs.twimg.com/media/FbqTr-KVEAAMyg6?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqTr-EVEAARkfn.jpg')" src="https://pbs.twimg.com/media/FbqTr-EVEAARkfn?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqTr-HVUAAYkyL.jpg')" src="https://pbs.twimg.com/media/FbqTr-HVUAAYkyL?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqTr-KVEAAMyg6.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27936">
+<img alt="" data-gallery="gallery27936" loading="lazy" src="https://pbs.twimg.com/media/FbqTr-KVEAAMyg6?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqTr-EVEAARkfn.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27936">
+<img alt="" data-gallery="gallery27936" loading="lazy" src="https://pbs.twimg.com/media/FbqTr-EVEAARkfn?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqTr-HVUAAYkyL.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27936">
+<img alt="" data-gallery="gallery27936" loading="lazy" src="https://pbs.twimg.com/media/FbqTr-HVUAAYkyL?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13167,19 +13217,19 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/프로미스나인">#프로미스나인</a> <a href="https://x.com/hashtag/FROMIS_9">#FROMIS_9</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqA-0eUYAIuJkr.jpg')" src="https://pbs.twimg.com/media/FbqA-0eUYAIuJkr?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqA-0fUcAEBivL.jpg')" src="https://pbs.twimg.com/media/FbqA-0fUcAEBivL?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqA-0cUEAAoC0m.jpg')" src="https://pbs.twimg.com/media/FbqA-0cUEAAoC0m?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqA-0cUEAEWyoc.jpg')" src="https://pbs.twimg.com/media/FbqA-0cUEAEWyoc?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqA-0eUYAIuJkr.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27937">
+<img alt="" data-gallery="gallery27937" loading="lazy" src="https://pbs.twimg.com/media/FbqA-0eUYAIuJkr?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqA-0fUcAEBivL.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27937">
+<img alt="" data-gallery="gallery27937" loading="lazy" src="https://pbs.twimg.com/media/FbqA-0fUcAEBivL?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqA-0cUEAAoC0m.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27937">
+<img alt="" data-gallery="gallery27937" loading="lazy" src="https://pbs.twimg.com/media/FbqA-0cUEAAoC0m?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqA-0cUEAEWyoc.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27937">
+<img alt="" data-gallery="gallery27937" loading="lazy" src="https://pbs.twimg.com/media/FbqA-0cUEAEWyoc?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13198,7 +13248,7 @@ Your browser does not support the video tag.
 중간에 크게 흔들린 부분이 있지만 그나마 멤버들이 잘 보이는 영상 살짝쿵 올려봅니다..!</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1565715831631126529/pu/img/-oSx4E0-tiCez_GR.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1565715831631126529/pu/vid/1280x720/N7rNs_OlMvkR4dd5.mp4?tag=12" type="video/mp4">
@@ -13220,16 +13270,16 @@ Your browser does not support the video tag.
 지원언니 쳐다보는 게 귀여워서..ㅎ</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqAYmEVUAAHKpo.jpg')" src="https://pbs.twimg.com/media/FbqAYmEVUAAHKpo?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqAY4_UEAAIZTw.jpg')" src="https://pbs.twimg.com/media/FbqAY4_UEAAIZTw?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqAZPkUEAELPHT.jpg')" src="https://pbs.twimg.com/media/FbqAZPkUEAELPHT?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqAYmEVUAAHKpo.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27938">
+<img alt="" data-gallery="gallery27938" loading="lazy" src="https://pbs.twimg.com/media/FbqAYmEVUAAHKpo?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqAY4_UEAAIZTw.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27938">
+<img alt="" data-gallery="gallery27938" loading="lazy" src="https://pbs.twimg.com/media/FbqAY4_UEAAIZTw?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqAZPkUEAELPHT.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27938">
+<img alt="" data-gallery="gallery27938" loading="lazy" src="https://pbs.twimg.com/media/FbqAZPkUEAELPHT?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13245,16 +13295,16 @@ Your browser does not support the video tag.
 진짜 세컷만화..ㅋㅋㅋ</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_xP7VQAEUNl7.jpg')" src="https://pbs.twimg.com/media/Fbp_xP7VQAEUNl7?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_xl-UYAEHqxg.jpg')" src="https://pbs.twimg.com/media/Fbp_xl-UYAEHqxg?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp_x7KVUAEs0MK.jpg')" src="https://pbs.twimg.com/media/Fbp_x7KVUAEs0MK?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_xP7VQAEUNl7.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27939">
+<img alt="" data-gallery="gallery27939" loading="lazy" src="https://pbs.twimg.com/media/Fbp_xP7VQAEUNl7?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_xl-UYAEHqxg.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27939">
+<img alt="" data-gallery="gallery27939" loading="lazy" src="https://pbs.twimg.com/media/Fbp_xl-UYAEHqxg?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp_x7KVUAEs0MK.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27939">
+<img alt="" data-gallery="gallery27939" loading="lazy" src="https://pbs.twimg.com/media/Fbp_x7KVUAEs0MK?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13271,19 +13321,19 @@ Your browser does not support the video tag.
 채영언니가 진짜 하얗고 하영언니 성량이 미쳤어요..</p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp-lVKVQAE49uc.jpg')" src="https://pbs.twimg.com/media/Fbp-lVKVQAE49uc?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp-lvjVsAA40ks.jpg')" src="https://pbs.twimg.com/media/Fbp-lvjVsAA40ks?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp-mP9VUAANgr-.jpg')" src="https://pbs.twimg.com/media/Fbp-mP9VUAANgr-?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbp-mn7UsAIJqHM.jpg')" src="https://pbs.twimg.com/media/Fbp-mn7UsAIJqHM?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp-lVKVQAE49uc.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27940">
+<img alt="" data-gallery="gallery27940" loading="lazy" src="https://pbs.twimg.com/media/Fbp-lVKVQAE49uc?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp-lvjVsAA40ks.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27940">
+<img alt="" data-gallery="gallery27940" loading="lazy" src="https://pbs.twimg.com/media/Fbp-lvjVsAA40ks?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp-mP9VUAANgr-.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27940">
+<img alt="" data-gallery="gallery27940" loading="lazy" src="https://pbs.twimg.com/media/Fbp-mP9VUAANgr-?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbp-mn7UsAIJqHM.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27940">
+<img alt="" data-gallery="gallery27940" loading="lazy" src="https://pbs.twimg.com/media/Fbp-mn7UsAIJqHM?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13302,16 +13352,16 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcS6e4RakAEYdTS.jpg')" src="https://pbs.twimg.com/media/FcS6e4RakAEYdTS?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcS6e4VaMAEVUIy.jpg')" src="https://pbs.twimg.com/media/FcS6e4VaMAEVUIy?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FcS6e4WaAAwIUEG.jpg')" src="https://pbs.twimg.com/media/FcS6e4WaAAwIUEG?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcS6e4RakAEYdTS.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27941">
+<img alt="" data-gallery="gallery27941" loading="lazy" src="https://pbs.twimg.com/media/FcS6e4RakAEYdTS?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcS6e4VaMAEVUIy.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27941">
+<img alt="" data-gallery="gallery27941" loading="lazy" src="https://pbs.twimg.com/media/FcS6e4VaMAEVUIy?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FcS6e4WaAAwIUEG.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27941">
+<img alt="" data-gallery="gallery27941" loading="lazy" src="https://pbs.twimg.com/media/FcS6e4WaAAwIUEG?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13327,16 +13377,16 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb5qz55acAAy42e.jpg')" src="https://pbs.twimg.com/media/Fb5qz55acAAy42e?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb5qz51akAAvDVK.jpg')" src="https://pbs.twimg.com/media/Fb5qz51akAAvDVK?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb5qz56aQAAqOcF.jpg')" src="https://pbs.twimg.com/media/Fb5qz56aQAAqOcF?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb5qz55acAAy42e.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27942">
+<img alt="" data-gallery="gallery27942" loading="lazy" src="https://pbs.twimg.com/media/Fb5qz55acAAy42e?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb5qz51akAAvDVK.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27942">
+<img alt="" data-gallery="gallery27942" loading="lazy" src="https://pbs.twimg.com/media/Fb5qz51akAAvDVK?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb5qz56aQAAqOcF.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27942">
+<img alt="" data-gallery="gallery27942" loading="lazy" src="https://pbs.twimg.com/media/Fb5qz56aQAAqOcF?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13352,13 +13402,13 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb0r1GaaIAUmQl2.jpg')" src="https://pbs.twimg.com/media/Fb0r1GaaIAUmQl2?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fb0r1GcakAMJnYG.jpg')" src="https://pbs.twimg.com/media/Fb0r1GcakAMJnYG?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb0r1GaaIAUmQl2.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27943">
+<img alt="" data-gallery="gallery27943" loading="lazy" src="https://pbs.twimg.com/media/Fb0r1GaaIAUmQl2?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fb0r1GcakAMJnYG.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27943">
+<img alt="" data-gallery="gallery27943" loading="lazy" src="https://pbs.twimg.com/media/Fb0r1GcakAMJnYG?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13374,16 +13424,16 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbv2Tw-aIAEsRTs.jpg')" src="https://pbs.twimg.com/media/Fbv2Tw-aIAEsRTs?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbv2UidakAApOQY.jpg')" src="https://pbs.twimg.com/media/Fbv2UidakAApOQY?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/Fbv2WdeakAA5S09.jpg')" src="https://pbs.twimg.com/media/Fbv2WdeakAA5S09?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbv2Tw-aIAEsRTs.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27944">
+<img alt="" data-gallery="gallery27944" loading="lazy" src="https://pbs.twimg.com/media/Fbv2Tw-aIAEsRTs?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbv2UidakAApOQY.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27944">
+<img alt="" data-gallery="gallery27944" loading="lazy" src="https://pbs.twimg.com/media/Fbv2UidakAApOQY?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/Fbv2WdeakAA5S09.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27944">
+<img alt="" data-gallery="gallery27944" loading="lazy" src="https://pbs.twimg.com/media/Fbv2WdeakAA5S09?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13399,19 +13449,19 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/이서연">#이서연</a> <a href="https://x.com/hashtag/LEESEOYEON">#LEESEOYEON</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqMQ4aaIAAln8x.jpg')" src="https://pbs.twimg.com/media/FbqMQ4aaIAAln8x?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqMQ4UaMAA9HWA.jpg')" src="https://pbs.twimg.com/media/FbqMQ4UaMAA9HWA?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqMQ4VacAE7UGk.jpg')" src="https://pbs.twimg.com/media/FbqMQ4VacAE7UGk?format=jpg&amp;name=medium" /></p>
-</figure>
-<figure>
-<p><img _="&quot;" alt="" class="post-image" loading="lazy" onclick="openFullscreen(this, 'https://pbs.twimg.com/media/FbqMQ4VaIAAWx1_.jpg')" src="https://pbs.twimg.com/media/FbqMQ4VaIAAWx1_?format=jpg&amp;name=medium" /></p>
-</figure>
+<div class="media-grid">
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqMQ4aaIAAln8x.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27945">
+<img alt="" data-gallery="gallery27945" loading="lazy" src="https://pbs.twimg.com/media/FbqMQ4aaIAAln8x?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqMQ4UaMAA9HWA.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27945">
+<img alt="" data-gallery="gallery27945" loading="lazy" src="https://pbs.twimg.com/media/FbqMQ4UaMAA9HWA?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqMQ4VacAE7UGk.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27945">
+<img alt="" data-gallery="gallery27945" loading="lazy" src="https://pbs.twimg.com/media/FbqMQ4VacAE7UGk?format=jpg&name=medium">
+</a></p>
+<p><a class="glightbox" href="https://pbs.twimg.com/media/FbqMQ4VaIAAWx1_.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery27945">
+<img alt="" data-gallery="gallery27945" loading="lazy" src="https://pbs.twimg.com/media/FbqMQ4VaIAAWx1_?format=jpg&name=medium">
+</a></p>
 </div>
 </div>
 </div>
@@ -13433,7 +13483,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/chaeyoung">#chaeyoung</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1567205515771674624/pu/img/bSs9KRrACcuf_oMu.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1567205515771674624/pu/vid/1280x720/s0mN2yr3hLvtWNaT.mp4?tag=12" type="video/mp4">
@@ -13458,7 +13508,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/chaeyoung">#chaeyoung</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1567092953386221568/pu/img/0zvnzvrRr5ca-eJz.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1567092953386221568/pu/vid/1280x720/EgLUABBP1ITrCk1a.mp4?tag=12" type="video/mp4">
@@ -13483,7 +13533,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/chaeyoung">#chaeyoung</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566818474433052677/pu/img/p0P97mhkVQaY-qOP.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566818474433052677/pu/vid/1280x720/A8RHbNiRv65SIke9.mp4?tag=12" type="video/mp4">
@@ -13508,7 +13558,7 @@ Your browser does not support the video tag.
 <a href="https://x.com/hashtag/fromis_9">#fromis_9</a> <a href="https://x.com/hashtag/chaeyoung">#chaeyoung</a></p>
 </div>
 <div class="post-media-container">
-<div class="invisible-grid">
+<div class="media-grid">
 <figure>
 <video controls="controls" poster="https://pbs.twimg.com/ext_tw_video_thumb/1566112455256064000/pu/img/M9DvAk1Rzt5pVvQf.jpg" preload="none">
 <source src="https://video.twimg.com/ext_tw_video/1566112455256064000/pu/vid/1280x720/witljsuJxuie-02n.mp4?tag=12" type="video/mp4">
@@ -13581,6 +13631,10 @@ Your browser does not support the video tag.
       
         <script src="../../javascripts/extra.js"></script>
       
+        <script src="../../javascripts/glightbox.js"></script>
+      
     
-  </body>
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "fade", "closeEffect": "fade", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
 </html>
