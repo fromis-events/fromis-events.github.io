@@ -277,10 +277,11 @@ def gather_posts_by_event(dirs, events_dict):
     #     print(f.name)
     # return out_dict
 
-    # with open('invalid.txt', 'r') as file:
-    #     ignored_auth = set(file.read().split())
+    with open('invalid.txt', 'r') as file:
+        ignored_auth = set(file.read().split())
 
-    ignored_auth = get_invalid_authors()
+    ignored_auth |= get_invalid_authors()
+    print('Ignored authors:', ignored_auth)
 
     seen = set()
     for file in files:
@@ -374,7 +375,7 @@ def get_invalid_authors():
     invalid_auth = set()
     for r in get_authors():
         if r['Download'] == 'n' or r['Deleted'] == 'y':
-            print('Invalid auth', r['Name'])
+            # print('Invalid auth', r['Name'])
             invalid_auth.add(r['Name'])
     return invalid_auth
 
