@@ -65,11 +65,11 @@ def get_full_text(data):
             full_text = full_text.replace(url['url'], f'[{url['expanded_url']}]({url['expanded_url']})')
 
     # pattern = r'(#[\w\uAC00-\uD7A3]+)'
-    pattern = r'#([\w\uAC00-\uD7A3]+)'
+    pattern = r'(?<![\w/])#([\w\uAC00-\uD7A3]+)'
     # full_text = re.sub(pattern, r'[\1](tags/\1)', full_text)
     full_text = re.sub(pattern, r'[\#\1](https://x.com/hashtag/\1)', full_text)
 
-    at_pattern = r'(@[\w\uAC00-\uD7A3]+)'
+    at_pattern = r'(?<![\w/])(@[\w\uAC00-\uD7A3]+)'
     full_text = re.sub(at_pattern, r'[\1](https://x.com/\1)', full_text)
 
     # full_text.replace('#', '\\#')
@@ -291,6 +291,8 @@ def gather_posts_by_event(dirs, events_dict):
                 print('WARNING skipping event not found in database', event_date)
                 continue
 
+            # event_data = events_dict[event_date]
+
             with open(file.path, 'r', encoding='utf-8') as f:
                 json_data = json.load(f)
 
@@ -386,6 +388,10 @@ def get_events_dict():
     event_dict = dict()
 
     for r in df.to_dict(orient="records"):
+        if r['Ignored']:
+            print('Skipping event ', r['Eng Name'])
+            continue
+
         event_dict.setdefault(str(r['Date']), [])
         event_dict[str(r['Date'])].append(r)
 

@@ -552,18 +552,12 @@ hide:
 | ![*(No Thumbnail)*](assets/thumb/241120.jpg){ width="100" } | [**241120** Myongji University College Union Festival 'Gaewha : 開花'](./events/241120){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/241122.jpg){ width="100" } | [**241122** Jisun Birthday Cafe](./events/241122){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250125.jpg){ width="100" } | [**250125** Jisun Exit Prelude Fan Photo Exhibition](./events/250125){ loading=lazy } |
-| *(No Thumbnail)* | [**250321** Nagyung (Super E Nagyung Ep. 1)](./events/250321){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250323.jpg){ width="100" } | [**250323** Samsung Lions Home Opener Special First Pitch & Bat](./events/250323){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250411.jpg){ width="100" } | [**250411** Nagyung @ Lotte World (Super E Nagyung Ep. 4)](./events/250411){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250422.jpg){ width="100" } | [**250422** Dolce & Gabbana](./events/250422){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250430.jpg){ width="100" } | [**250430** Allure x SIMIHAZE BEAUTY party (Jisun & Seoyeon)](./events/250430){ loading=lazy } |
 | *(No Thumbnail)* | [**250502** ICN Arrival](./events/250502){ loading=lazy } |
 | ![*(No Thumbnail)*](assets/thumb/250517.jpg){ width="100" } | [**250517** Kia K8 Brand Day First Pitch & Bat](./events/250517){ loading=lazy } |
-| *(No Thumbnail)* | [**250530** Chaeyoung HLE S2 Ep 5](./events/250530){ loading=lazy } |
-| *(No Thumbnail)* | [**250608** Chaeyoung Silent Disco 2 (Musina?)](./events/250608){ loading=lazy } |
-| *(No Thumbnail)* | [**250611** Chaeyoung HLE S2 Ep 6](./events/250611){ loading=lazy } |
-| *(No Thumbnail)* | [**250613** Chaeyoung HLE S2 Ep 7](./events/250613){ loading=lazy } |
-| *(No Thumbnail)* | [**250614** Hayoung Wedding Appearance](./events/250614){ loading=lazy } |
 | *(No Thumbnail)* | [**250621** Gyuri SMA Seoul Music Awards](./events/250621){ loading=lazy } |
 
 
