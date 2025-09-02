@@ -32,28 +32,27 @@ era_dates = [
     [0, 'Pre-Debut'],
 ]
 
+gallery_index = 0
+
 
 def make_image_md(url, caption='', zoom_click=True, figure=True):
     if caption:
         caption = f'<figcaption>{caption}</figcaption>'
 
-    zoom_md = f'onclick="openFullscreen(this, \'{url}\')"' if zoom_click else ''
-
     base_url = url.rsplit('.', maxsplit=1)[0]
-
-    # if 'png' in url.rsplit('.', maxsplit=1)[1]:
-    #     print('FOUND PNG', url)
 
     low_res_url = base_url + '?format=jpg&name=medium'
 
-    if figure:
-        return f"""\
-<figure markdown="1">
-![]({low_res_url}){{ loading=lazy {zoom_md} class="post-image""}}{caption}
-</figure>"""
-    else:
-        return f'![]({low_res_url}){{ loading=lazy {zoom_md}"}}{caption}'
+    # TODO why doesn't this format work??
+#     return f'''
+# ![]({low_res_url}){{ loading=lazy data-gallery="gallery{gallery_index}" src="{url}" }}
+# '''
 
+    return f'''
+<a class="glightbox" href="{url}" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom" data-gallery="gallery{gallery_index}">
+<img alt="" data-gallery="gallery{gallery_index}" loading="lazy" src="{low_res_url}">
+</a>
+'''
 
 def make_iframe_md(embed_url, display_url=None):
     if display_url is None:
@@ -89,6 +88,15 @@ def make_media_md(post):
         image_url = img['media_url_https']
         elems.append(make_image_md(image_url))
 
+    if len(post.get_images()):
+        global gallery_index
+        gallery_index += 1
+
+    # if len(post.get_videos()) > 1:
+    #     print('FOUND MULTI VID')
+    #     print(post.event_date)
+    #     print(post.author)
+
     for vid in post.get_videos():
         if video_url := get_video_url(vid):
             elems.append(make_video_md(video_url, vid['media_url_https'], 'video/mp4'))
@@ -116,7 +124,7 @@ def make_media_md(post):
     #             print('\tMake img', image_url)
     #             elems.append(make_image_md(image_url))
 
-    grid = '<div class="invisible-grid" markdown="1">\n'
+    grid = '<div class="media-grid" markdown="1">\n'
     grid += '\n'.join(elems)
     grid += '\n</div>'
 
@@ -370,8 +378,8 @@ def main():
     events_dict = get_events_dict()
 
     # these are folders!
-    posts_by_event = gather_posts_by_event(['json-test'], events_dict)
-    # posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
+    # posts_by_event = gather_posts_by_event(['json-test'], events_dict)
+    posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
 
     print(f'Generating {len(posts_by_event)} events')
 

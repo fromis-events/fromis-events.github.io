@@ -304,6 +304,7 @@ def gather_posts_by_event(dirs, events_dict):
                     continue
 
                 post = Post(d)
+                post.event_date = event_date
                 if post.author in ignored_auth:
                     # print('Ignored', post.author)
                     continue
