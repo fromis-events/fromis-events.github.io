@@ -319,7 +319,7 @@ hide:
   - navigation
 ---
 
-# Home\n\n
+# Events\n\n
 """
 
     current_era = None
@@ -348,7 +348,7 @@ hide:
 
 
         # Assumes your script runs from the project root, and 'docs' is a subfolder
-        thumb_path_for_mkdocs = f'assets/thumb/{e}.jpg'
+        thumb_path_for_mkdocs = f'/assets/thumb/{e}.jpg'
         thumb_path_on_disk = f'docs/{thumb_path_for_mkdocs}'
 
         if not os.path.exists(thumb_path_on_disk):
@@ -366,7 +366,7 @@ hide:
 
         # 3. Create the text part with the link
         event_name = get_event_name(e, events_dict)
-        link_markdown = f"[**{e}** {event_name}](./events/{e}){{ loading=lazy }}"
+        link_markdown = f"[**{e}** {event_name}](./{e}){{ loading=lazy }}"
 
         # 4. Add a new row to the table for this event
         out += f"| {image_html} | {link_markdown} |\n"
@@ -389,7 +389,7 @@ hide:
 # * ![]({thumb_path}) [**{e}** {get_event_name(e, events_dict)}](./events/{e})
 # """
 
-    with open('docs/index.md', 'w', encoding='utf-8') as txt:
+    with open('docs/events/index.md', 'w', encoding='utf-8') as txt:
         txt.writelines(out)
 
     # posts_by_event = gather_events(root_dir)
@@ -407,16 +407,16 @@ def main():
     events_dict = get_events_dict()
 
     # these are folders!
-    # posts_by_event = gather_posts_by_event(['json-test'], events_dict)
-    posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
+    posts_by_event = gather_posts_by_event(['json-test'], events_dict)
+    # posts_by_event = gather_posts_by_event(['json2', 'json'], events_dict)
 
     print(f'Generating {len(posts_by_event)} events')
-
-    make_index(posts_by_event.keys(), events_dict)
 
     if os.path.exists('docs/events'):
         shutil.rmtree('docs/events')
     os.makedirs('docs/events')
+
+    make_index(posts_by_event.keys(), events_dict)
 
     for event, posts in posts_by_event.items():
         make_event(event, posts, events_dict)
