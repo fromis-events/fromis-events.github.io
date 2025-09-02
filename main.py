@@ -197,6 +197,8 @@ def make_event(event_date, posts: list[Post], events_dict):
         print('ERROR', event_date, 'has no posts')
     #     return
 
+    eng_date_name, kor_date_name = get_date_name(event_date, events_dict)
+
     events = events_dict[event_date]
     out = f"""---
 slug: \"{event_date}\"
@@ -205,13 +207,15 @@ hide:
   - navigation
 ---
 
-# {event_date} {get_event_name(event_date, events_dict)}
-
+# {event_date} {eng_date_name}
 """
 
     has_alt = False
     for e in events:
-        out += f'**{e['Eng Name']}**\n\n'
+        event_name = e['Eng Name']
+        if kor := e.get('Kor Name'):
+            event_name += f' ({kor})'
+        out += f'**{event_name}**\n\n'
 
         twi_search = e['Twitter']
         if alt := e.get('Alt 1'):
@@ -288,6 +292,8 @@ def make_index(events, events_dict):
     out = f"""---
 hide:
   - navigation
+search:
+  exclude: true
 ---
 
 # Events\n\n
@@ -336,8 +342,9 @@ hide:
             image_html = f'![*(No Thumbnail)*]({thumb_path_for_mkdocs}){{ width="100" }}'
 
         # 3. Create the text part with the link
-        event_name = get_event_name(e, events_dict)
-        link_markdown = f"[**{e}** {event_name}](./{e}){{ loading=lazy }}"
+        eng_date_name, kor_date_name = get_date_name(e, events_dict)
+        # link_markdown = f"[**{e}** {eng_date_name}](./{e}){{ loading=lazy }}"
+        link_markdown = f"[**{e}**<br>{eng_date_name}<br>{kor_date_name}](./{e}){{ loading=lazy }}"
 
         # 4. Add a new row to the table for this event
         out += f"| {image_html} | {link_markdown} |\n"
@@ -366,13 +373,22 @@ hide:
     # posts_by_event = gather_events(root_dir)
     # for event, posts in posts_by_event.items():
 
-def get_event_name(event, events_dict):
-    if events := events_dict.get(event):
-        names = [e['Eng Name'] for e in events]
-        return ' & '.join(names)
+def get_date_name(date, events_dict):
+    if events := events_dict.get(date):
+        eng_names = []
+        kor_names = []
+        for e in events:
+            eng = e['Eng Name']
+            eng_names.append(eng)
+            if kor := e.get('Kor Name'):
+                kor_names.append(kor)
+            else:
+                kor_names.append(eng)
+
+        return ' & '.join(eng_names), ' & '.join(kor_names)
     else:
-        print('ERROR failed to find event name for', event)
-        return 'Unknown Event'
+        print('ERROR failed to find event name for', date)
+        return 'Unknown Event', 'Unknown Event'
 
 def main():
     events_dict = get_events_dict()
