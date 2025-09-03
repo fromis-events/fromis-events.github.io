@@ -13,7 +13,6 @@ tr {
 
 .md-typeset img {
   max-height: 720px;
-  display: block;
   border-radius: 8px; /* Add rounded corners */
 }
 
@@ -43,7 +42,7 @@ tr {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
   margin: 0 auto;
   margin-bottom: 2rem;
-  padding: 1rem 0;
+  padding: 1rem 1rem;
 }
 
 .author-container h2 {
@@ -183,18 +182,40 @@ iframe {
   display: flex;
   justify-content: center; /* horizontal */
   align-items: center;     /* vertical */
+  width: 100%;
+  height: 100%;
 }
 
-.glightbox img {
-  max-height: 680px;
-}
-
-/* Style for the images within the grid */
 .grid img {
-  object-fit: contain; /* This prevents the images from being distorted */
-  display: block; /* Removes any extra space below the image */
+  max-height: 1080px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  outline: 1px solid #172727;
+  outline-offset: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); /* Add a subtle shadow */
 }
+
+.grid-item:only-child img {
+  object-fit: contain;
+}
+
+.grid-item.portrait:only-child img {
+  width: auto;
+}
+
 
 .grid h1 {
-    margin: 0;
+  margin: 0;
+}
+
+/* Landscape images span 2 columns */
+.grid-item.landscape {
+  grid-column: span 2;
+}
+
+.grid-item p {
+  width: 100%;
+  height: 100%;
 }
