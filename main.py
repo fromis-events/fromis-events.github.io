@@ -48,7 +48,7 @@ def make_image_md(url, caption='', zoom_click=True, figure=True):
     if ext == 'png':
         print('Loading url', base_url, ext)
 
-    low_res_url = base_url + '?format=jpg&name=small'
+    low_res_url = base_url + '?format=jpg&name=medium'
     orig_url = base_url + f'?format={ext}&name=orig'
 
     # TODO why doesn't this format work??
@@ -178,7 +178,6 @@ def make_post_md(post: Post):
 def make_youtube_md(url):
     embed_url = url.replace('watch?v=', 'embed/')
     return f"""
-<figure class="snippet" markdown="1">
 <iframe 
     src="{embed_url}"
     title="What is this"
@@ -186,17 +185,47 @@ def make_youtube_md(url):
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
     allowfullscreen>
 </iframe>
-<a href="{url}">{url}</a>
-</figure>
 """
 
 # TODO actually embed the tweet
 def make_tweet_md(url):
     return f'<a href="{url}">{url}</a>'
 
+def make_yt_events_md(data):
+    out = '<div class="grid" markdown="1">\n'
+    for d in data:
+        yt_md = make_youtube_md(f'https://youtube.com/watch?v={d['id']}')
+        out += f'\n{yt_md}\n'
+
+    out += '\n</div>'
+    return out
 
 
-def make_event(event_date, posts: list[Post], events_dict):
+def make_event(event_date, posts: list[Post], events_dict, yt_data):
+    # filter the posts
+    authors = set([p.author for p in posts])
+    def is_valid_post(p):
+        if '180124' in p.author:
+            print(p.full_text)
+
+        for a in authors:
+            if event_date == '180124':
+                print(p.full_text)
+
+            if a == p.author:
+                continue
+
+            if a == 'realfromis_9':
+                continue
+
+            if a in p.full_text:
+                # print('Skipping retweet', event_date, p.author, a)
+                # print(p.full_text, '\n')
+                return False
+        return True
+
+    posts = [p for p in posts if is_valid_post(p)]
+
     if len(posts) == 0:
         print('ERROR', event_date, 'has no posts')
     #     return
@@ -262,6 +291,12 @@ hide:
 
 
     if not has_alt:
+        # embed yt vids
+        yt_vids = yt_data.get(event_date, None)
+        if yt_vids:
+            out += make_yt_events_md(yt_vids)
+            out += '\n---\n'
+
         first_auth = True
         for auth, ps in by_author.items():
             ps = [p for p in ps if p.has_media()]
@@ -397,7 +432,12 @@ def get_date_name(date, events_dict):
         print('ERROR failed to find event name for', date)
         return 'Unknown Event', 'Unknown Event'
 
+def get_yt_events():
+    with open('./raw/youtube_events.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
+
 def main():
+    yt_data = get_yt_events()
     events_dict = get_events_dict()
 
     # these are folders!
@@ -413,7 +453,7 @@ def main():
     make_index(posts_by_event.keys(), events_dict)
 
     for event, posts in posts_by_event.items():
-        make_event(event, posts, events_dict)
+        make_event(event, posts, events_dict, yt_data)
 
 if __name__ == '__main__':
     main()

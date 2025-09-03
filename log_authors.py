@@ -3,7 +3,8 @@ import os
 import json
 
 import twitter_utils as utils
-from twitter_utils import Post
+from twitter_utils import Post, get_authors
+
 
 def get_tweets(folder):
     out_dict = dict()
@@ -61,6 +62,16 @@ def log_authors():
         print(f'{name}\t{count}\t{earliest[name].strftime("%Y-%m-%d")}\t{latest[name].strftime("%Y-%m-%d")}')
 
 def log_authors2(posts):
+    auth_dict = dict()
+
+    curr_data = get_authors()
+    for data in curr_data:
+        auth_dict[data['Name']] = data
+    # for a, d in auth_dict.items():
+    #     print(a, d)
+    #
+    # return
+
     authors = dict()
     total_authors = dict()
     latest = dict()
@@ -84,9 +95,25 @@ def log_authors2(posts):
 
     tuples = authors.items()
 
-    new_tuples = sorted(tuples, key=lambda x: x[1])
+    new_tuples = sorted(tuples, key=lambda x: x[1], reverse=True)
+
+    rows = []
     for name, count in new_tuples:
-        print(f'{name}\t{count}\t{total_authors[name]}\t{earliest[name].strftime("%Y-%m-%d")}\t{latest[name].strftime("%Y-%m-%d")}')
+        if count >= 5:
+            download = ''
+            if d := auth_dict.get(name):
+                download = d.get('Download', '')
+
+            deleted = ''
+            if d := auth_dict.get(name):
+                deleted = d.get('Deleted', '')
+
+            row = f'{name}\t{count}\t{total_authors[name]}\t{earliest[name].strftime("%Y-%m-%d")}\t{latest[name].strftime("%Y-%m-%d")}\t{download}\t{deleted}'
+            print(row)
+            rows.append(row)
+
+    with open('authors.txt', 'w', encoding='utf-8') as f:
+        f.write('\n'.join(rows))
 
 
 if __name__ == '__main__':
@@ -99,4 +126,4 @@ if __name__ == '__main__':
     print(len(combined))
 
     posts = combined.values()
-    # log_authors2(posts)
+    log_authors2(posts)

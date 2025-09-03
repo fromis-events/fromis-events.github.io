@@ -65,7 +65,7 @@ def get_full_text(data):
             full_text = full_text.replace(url['url'], f'[{url['expanded_url']}]({url['expanded_url']})')
 
     # pattern = r'(#[\w\uAC00-\uD7A3]+)'
-    pattern = r'(?<![\w/])#([\w\uAC00-\uD7A3]+)'
+    pattern = r'(?<![\w/])#[\u20DD]*([\w\uAC00-\uD7A3]+)'
     # full_text = re.sub(pattern, r'[\1](tags/\1)', full_text)
     full_text = re.sub(pattern, r'[\#\1](https://x.com/hashtag/\1)', full_text)
 
@@ -266,22 +266,17 @@ def gather_events(root_dir):
             out.append(event_date)
     return out
 
-def gather_posts_by_event(dirs, events_dict):
-    out_dict = dict()
+def gather_posts(dirs, events_dict):
+    posts = []
     files = []
 
     for d in dirs:
         files += os.scandir(d)
 
-    # for f in files:
-    #     print(f.name)
-    # return out_dict
-
     with open('invalid.txt', 'r') as file:
         ignored_auth = set(file.read().split())
 
     ignored_auth |= get_invalid_authors()
-    print('Ignored authors:', ignored_auth)
 
     seen = set()
     for file in files:
@@ -292,12 +287,8 @@ def gather_posts_by_event(dirs, events_dict):
                 print('WARNING skipping event not found in database', event_date)
                 continue
 
-            # event_data = events_dict[event_date]
-
             with open(file.path, 'r', encoding='utf-8') as f:
                 json_data = json.load(f)
-
-            out_dict.setdefault(event_date, [])
 
             for d in json_data:
                 if not is_tweet(d):
@@ -314,9 +305,81 @@ def gather_posts_by_event(dirs, events_dict):
                     continue
 
                 seen.add(post.post_id)
-                out_dict[event_date].append(post)
+                posts.append(post)
 
-    return out_dict
+    by_author = dict()
+    for p in posts:
+        by_author.setdefault(p.author, [])
+        by_author[p.author].append(p)
+
+    filtered_posts = []
+    for a, ps in by_author.items():
+        if len(ps) < 4:
+            continue
+        print('Skip auth', a, len(ps))
+        filtered_posts += ps
+
+    return posts
+
+def gather_posts_by_event(dirs, events_dict):
+    posts = gather_posts(dirs, events_dict)
+    by_event = dict()
+    for p in posts:
+        by_event.setdefault(p.event_date, [])
+        by_event[p.event_date].append(p)
+
+    return by_event
+
+    # out_dict = dict()
+    # files = []
+    #
+    # for d in dirs:
+    #     files += os.scandir(d)
+    #
+    # # for f in files:
+    # #     print(f.name)
+    # # return out_dict
+    #
+    # with open('invalid.txt', 'r') as file:
+    #     ignored_auth = set(file.read().split())
+    #
+    # ignored_auth |= get_invalid_authors()
+    # print('Ignored authors:', ignored_auth)
+    #
+    # seen = set()
+    # for file in files:
+    #     if file.is_file():
+    #         event_date = file.name.split('.')[0]
+    #
+    #         if event_date not in events_dict:
+    #             print('WARNING skipping event not found in database', event_date)
+    #             continue
+    #
+    #         # event_data = events_dict[event_date]
+    #
+    #         with open(file.path, 'r', encoding='utf-8') as f:
+    #             json_data = json.load(f)
+    #
+    #         out_dict.setdefault(event_date, [])
+    #
+    #         for d in json_data:
+    #             if not is_tweet(d):
+    #                 continue
+    #
+    #             post = Post(d)
+    #             post.event_date = event_date
+    #             if post.author in ignored_auth:
+    #                 # print('Ignored', post.author)
+    #                 continue
+    #
+    #             if post.post_id in seen:
+    #                 # print('FOUND DUPE', post.post_id)
+    #                 continue
+    #
+    #             seen.add(post.post_id)
+    #             out_dict[event_date].append(post)
+    #
+    # return out_dict
 
 
 def gather_json_data(root_dir):
@@ -354,23 +417,11 @@ def gather_json_data(root_dir):
 
 def get_authors():
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=4550570&single=true&output=tsv'
-    response = requests.get(url)
-    response.encoding = 'utf-8'
-    tsv_data = response.text
 
-    out = []
+    df = pd.read_csv(url, sep='\t', header=0)
+    df = df.where(pd.notnull(df), '')
 
-    reader = csv.reader(StringIO(tsv_data), delimiter='\t')
-
-    headers = next(reader)
-    for row in reader:
-        elem = {}
-        for i, h in enumerate(headers):
-            elem[h] = row[i]
-        # print(elem)
-        out.append(elem)
-
-    return out
+    return df.to_dict(orient="records")
 
 def get_invalid_authors():
     invalid_auth = set()
@@ -380,11 +431,10 @@ def get_invalid_authors():
             invalid_auth.add(r['Name'])
     return invalid_auth
 
-
 def get_events_dict():
-    events_sheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1556948653&single=true&output=tsv'
+    auth_sheet = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPT5wfb1Eh7r7RqGXJNtXeUhbAlokMvIiZdB6PdAQZoRb4JkwCy5Lw4XylvAwnsr7lmVbqPdPrVsMO/pub?gid=1556948653&single=true&output=tsv'
 
-    df = pd.read_csv(events_sheet, sep='\t', header=0)
+    df = pd.read_csv(auth_sheet, sep='\t', header=0)
     df = df.where(pd.notnull(df), None)
 
     event_dict = dict()
